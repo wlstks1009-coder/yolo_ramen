@@ -11,7 +11,7 @@ import json
 app = FastAPI()
 
 # 1. YOLOv8 모델 로드
-model = YOLO("ramen_yolo11n_best.pt")
+model = YOLO("yolo11n_.pt")
 
 
 
@@ -83,7 +83,7 @@ async def predict(file: UploadFile = File(...)):
 
     # 2. ★ 중요: model('C:/...') 대신, 위에서 안전하게 열어둔 'image_data' 변수를 그대로 던집니다!
     # 이렇게 해야 YOLO가 경로를 다시 안 찾아가고 메모리에 로드된 사진을 그대로 분석합니다.
-    results = model(image_data, conf=0.4, imgsz=640)
+    results = model(image_data, conf=0.5, imgsz=640)
 
     detected_class = None
     confidence = 0.0

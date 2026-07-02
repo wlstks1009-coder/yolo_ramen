@@ -1,6 +1,6 @@
 from ultralytics import YOLO
 
-model = YOLO("yolo11m.pt")
+model = YOLO("yolo11n_ver2.pt")
 
 
 metrics = model.val(data=r"C:\Users\M\Desktop\dataset\ramen\data.yaml")
