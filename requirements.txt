@@ -1,0 +1,9 @@
+ultralytics
+Pillow
+fastapi
+uvicorn
+python-multipart
+flask
+requests
+oracledb
+pandas

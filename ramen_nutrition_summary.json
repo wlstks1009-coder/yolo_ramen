@@ -1,0 +1,122 @@
+[
+  {
+    "YOLO_CLASS": "anseong_ramen",
+    "productName": "안성탕면",
+    "weightG": 125.0,
+    "calories": 525.0,
+    "carbohydrate": 82.0,
+    "protein": 11.0,
+    "fat": 17.0,
+    "sugar": 3.0,
+    "sodium": 1790.0,
+    "saturatedFat": 9.0
+  },
+  {
+    "YOLO_CLASS": "baehongdong",
+    "productName": "배홍동비빔면",
+    "weightG": 137.0,
+    "calories": 585.0,
+    "carbohydrate": 83.0,
+    "protein": 9.0,
+    "fat": 24.0,
+    "sugar": 18.0,
+    "sodium": 1349.4,
+    "saturatedFat": 11.0
+  },
+  {
+    "YOLO_CLASS": "chamkkae_ramen",
+    "productName": "오뚜기 참깨라면",
+    "weightG": 110.0,
+    "calories": 514.8,
+    "carbohydrate": 69.0,
+    "protein": 10.0,
+    "fat": 22.0,
+    "sugar": 4.0,
+    "sodium": 1589.5,
+    "saturatedFat": 9.0
+  },
+  {
+    "YOLO_CLASS": "chapagetti",
+    "productName": "올리브짜파게티",
+    "weightG": 140.0,
+    "calories": 610.4,
+    "carbohydrate": 96.0,
+    "protein": 11.0,
+    "fat": 20.0,
+    "sugar": 7.0,
+    "sodium": 1100.4,
+    "saturatedFat": 8.0
+  },
+  {
+    "YOLO_CLASS": "chasullen",
+    "productName": "짜슐랭",
+    "weightG": 145.0,
+    "calories": 600.3,
+    "carbohydrate": 100.0,
+    "protein": 12.0,
+    "fat": 18.0,
+    "sugar": 6.0,
+    "sodium": 1100.6,
+    "saturatedFat": 8.0
+  },
+  {
+    "YOLO_CLASS": "jin_mild",
+    "productName": "진라면(순한맛)",
+    "weightG": 120.0,
+    "calories": 500.4,
+    "carbohydrate": 77.0,
+    "protein": 12.0,
+    "fat": 16.0,
+    "sugar": 4.0,
+    "sodium": 1779.6,
+    "saturatedFat": 8.0
+  },
+  {
+    "YOLO_CLASS": "jjajjaroni",
+    "productName": "짜짜로니",
+    "weightG": 140.0,
+    "calories": 540.4,
+    "carbohydrate": 89.0,
+    "protein": 12.0,
+    "fat": 15.0,
+    "sugar": 7.0,
+    "sodium": 1180.2,
+    "saturatedFat": 7.0
+  },
+  {
+    "YOLO_CLASS": "paldo_bibim",
+    "productName": "팔도비빔면",
+    "weightG": 130.0,
+    "calories": 525.2,
+    "carbohydrate": 80.0,
+    "protein": 9.0,
+    "fat": 19.0,
+    "sugar": 12.0,
+    "sodium": 1089.4,
+    "saturatedFat": 9.0
+  },
+  {
+    "YOLO_CLASS": "samyang_ramen",
+    "productName": "삼양라면",
+    "weightG": 120.0,
+    "calories": 514.8,
+    "carbohydrate": 81.0,
+    "protein": 10.0,
+    "fat": 17.0,
+    "sugar": 3.0,
+    "sodium": 1779.6,
+    "saturatedFat": 7.0
+  },
+  {
+    "YOLO_CLASS": "shin_ramen",
+    "productName": "신라면",
+    "weightG": 120.0,
+    "calories": 500.4,
+    "carbohydrate": 79.0,
+    "protein": 10.0,
+    "fat": 16.0,
+    "sugar": 4.0,
+    "sodium": 1790.4,
+    "saturatedFat": 8.0
+  }
+]
