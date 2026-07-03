@@ -7,3 +7,5 @@ flask
 requests
 oracledb
 pandas
+pymysql
+sqlalchemy

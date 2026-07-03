@@ -1,5 +1,5 @@
 import io
-import oracledb  # 오라클 연결 라이브러리
+import pymysql  # 오라클 연결 라이브러리
 from fastapi import FastAPI, UploadFile, File
 from ultralytics import YOLO
 from PIL import Image
@@ -7,45 +7,38 @@ import config
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import json
-# 하하
+from textwrap import dedent
+from sqlalchemy import text
 
 app = FastAPI()
 
 # 1. YOLOv8 모델 로드
-model = YOLO("yolo11n_.pt")
+model = YOLO("yolo11n_ver2.pt")
 
-
+engine = config.get_engine()
 
 
 def get_ramen_info_from_db(yolo_class_name):
-    """오라클 DB에서 YOLO 클래스명으로 라면 영양성분을 조회하는 함수"""
-    connection = None
-    cursor = None
-    try:
-        # DB 연결 (Thick 또는 Thin 모드 자동 결정)
-        connection = oracledb.connect(
-            user=config.DB_USER,
-            password=config.DB_PASSWORD,
-            dsn=config.DB_DSN
-        )
-        cursor = connection.cursor()
+    """SQLAlchemy Engine을 사용해 마리아DB에서 라면 정보를 조회하는 함수"""
 
-        # 첨부해주신 CSV 컬럼 순서 기반 SELECT 쿼리
-        query = """
-                SELECT 식품명, \
-                       에너지_KCAL, \
-                       단백질_G, \
-                       지방_G, \
-                       탄수화물_G, \
-                       당류_G, \
-                       나트륨_MG, \
-                       식품중량, \
-                       제조사명
-                FROM RAMEN_NUTRITION
-                WHERE YOLO_CLASS = :1
-                """
-        cursor.execute(query, [yolo_class_name])
-        row = cursor.fetchone()
+    query = dedent("""
+                   SELECT 식품명,
+                          에너지_KCAL,
+                          단백질_G,
+                          지방_G,
+                          탄수화물_G,
+                          당류_G,
+                          나트륨_MG,
+                          식품중량,
+                          제조사명
+                   FROM RAMEN_NUTRITION
+                   WHERE YOLO_CLASS = :class_name
+                   """)
+
+    try:
+        with engine.connect() as connection:
+            result = connection.execute(text(query), {"class_name": yolo_class_name})
+            row = result.fetchone()
 
         if row:
             return {
@@ -60,12 +53,10 @@ def get_ramen_info_from_db(yolo_class_name):
                 "brand": row[8]
             }
         return None
+
     except Exception as e:
-        print(f"DB Error: {e}")
+        print(f"❌ 마리아DB(SQLAlchemy) 에러: {e}")
         return None
-    finally:
-        if cursor: cursor.close()
-        if connection: connection.close()
 
 
 @app.post("/predict")
@@ -100,10 +91,9 @@ async def predict(file: UploadFile = File(...)):
     print(f"▶ [2 단계] YOLO 검출 결과 -> 클래스: {detected_class}, 신뢰도: {confidence}")
 
     if detected_class:
-        # 오라클 DB에서 실시간 영양성분 꺼내오기
         db_info = get_ramen_info_from_db(detected_class)
 
-        print(f"▶ [3 단계] 오라클 DB 조회 결과: {db_info}")
+        print(f"▶ [3 단계] DB 조회 결과: {db_info}")
 
         if db_info:
             return {
