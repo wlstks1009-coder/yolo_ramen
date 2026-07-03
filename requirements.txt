@@ -1,9 +1,9 @@
-ultralytics
-Pillow
+ultralytics 
+Pillow 
 fastapi
-uvicorn
+uvicorn 
 python-multipart
-flask
+flask 
 requests
 oracledb
 pandas
