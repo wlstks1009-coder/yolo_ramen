@@ -24,7 +24,7 @@ function NutritionTable({ result }) {
 
   return (
     <section className="panel">
-      <h2>📋 상세 영양성분</h2>
+      <h2>📋 상세 영양성분 (100g 기준)</h2>
 
       <table className="nutrition-table">
         <tbody>
