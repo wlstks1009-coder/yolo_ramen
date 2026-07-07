@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # =====================
 # Python
 # =====================
@@ -9,7 +8,6 @@ __pycache__/
 *.pyo
 *.pyd
 
-
 # =====================
 # React / Node
 # =====================
@@ -17,13 +15,17 @@ node_modules/
 frontend/node_modules/
 frontend/dist/
 
-
 # =====================
 # Environment / Secret
 # =====================
 .env
 *.env
+config.py
 
+# =====================
+# YOLO / Training Result
+# =====================
+runs/
 
 # =====================
 # IDE
@@ -31,13 +33,11 @@ frontend/dist/
 .vscode/
 .idea/
 
-
 # =====================
 # OS
 # =====================
 .DS_Store
 Thumbs.db
-
 
 # =====================
 # Logs
@@ -47,15 +47,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-
 # =====================
 # Temporary / Debug
 # =====================
 debug_*.jpg
 debug_*.png
 capture_*.jpg
-=======
-.venv/
-
-runs
->>>>>>> origin/master
