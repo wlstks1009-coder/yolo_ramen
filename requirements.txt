@@ -1,10 +1,11 @@
-ultralytics 
-Pillow 
 fastapi
-uvicorn 
-python-multipart
-flask 
+uvicorn
+flask
 requests
 oracledb
+ultralytics
+pillow
 pandas
+opencv-python
+python-multipart
 config
