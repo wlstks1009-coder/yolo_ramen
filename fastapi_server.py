@@ -1,4 +1,3 @@
-#import
 import io
 import pymysql  # 오라클 연결 라이브러리
 from fastapi import FastAPI, UploadFile, File
@@ -8,58 +7,21 @@ import config
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import json
-<<<<<<< HEAD
-
-=======
 from textwrap import dedent
 from sqlalchemy import text
->>>>>>> origin/master
+from pydantic import BaseModel
+from typing import Optional
+
+class RamenFeedback(BaseModel):
+    detected_class: str
+    detected_name: str
+    is_correct: bool
+    corrected_ramen: Optional[str] = None  # 틀렸을 때 선택한 라면명 혹은 직접 입력값
+    confidence: float
 
 app = FastAPI()
 
 # 1. YOLOv8 모델 로드
-<<<<<<< HEAD
-MODEL_PATH = "ramen_yolo11n_best.pt"
-YOLO_CONFIDENCE = 0.8
-YOLO_IMAGE_SIZE = 640
-
-model = YOLO(MODEL_PATH)
-
-
-def get_ramen_info_from_db(yolo_class_name):
-    connection = None
-    cursor = None
-
-    try:
-        connection = oracledb.connect(
-            user=config.DB_USER,
-            password=config.DB_PASSWORD,
-            dsn=config.DB_DSN
-        )
-
-        cursor = connection.cursor()
-
-        query = """
-            SELECT
-                식품명,
-                에너지_KCAL,
-                단백질_G,
-                지방_G,
-                탄수화물_G,
-                당류_G,
-                나트륨_MG,
-                식품중량,
-                제조사명
-            FROM RAMEN_NUTRITION
-            WHERE YOLO_CLASS = :1
-        """
-
-        cursor.execute(query, [yolo_class_name])
-        row = cursor.fetchone()
-
-        if row is None:
-            return None
-=======
 model = YOLO("yolo11n_ver2.pt")
 
 engine = config.get_engine()
@@ -68,7 +30,7 @@ engine = config.get_engine()
 def get_ramen_info_from_db(yolo_class_name):
     """SQLAlchemy Engine을 사용해 마리아DB에서 라면 정보를 조회하는 함수"""
 
-    query = dedent("""
+    query = text("""
                    SELECT 식품명,
                           에너지_KCAL,
                           단백질_G,
@@ -84,7 +46,7 @@ def get_ramen_info_from_db(yolo_class_name):
 
     try:
         with engine.connect() as connection:
-            result = connection.execute(text(query), {"class_name": yolo_class_name})
+            result = connection.execute((query), {"class_name": yolo_class_name})
             row = result.fetchone()
 
         if row:
@@ -104,80 +66,39 @@ def get_ramen_info_from_db(yolo_class_name):
     except Exception as e:
         print(f"❌ 마리아DB(SQLAlchemy) 에러: {e}")
         return None
->>>>>>> origin/master
-
-        return {
-            "name": row[0],
-            "calories": f"{row[1]} kcal",
-            "protein": f"{row[2]} g",
-            "fat": f"{row[3]} g",
-            "carbs": f"{row[4]} g",
-            "sugar": f"{row[5]} g",
-            "sodium": f"{row[6]} mg",
-            "weight": row[7],
-            "brand": row[8],
-        }
-
-    except Exception as e:
-        print("DB 조회 오류:", e)
-        return None
-
-    finally:
-        if cursor:
-            cursor.close()
-        if connection:
-            connection.close()
-
-
 
 def get_average_nutrition_from_db():
-    connection = None
-    cursor = None
 
     try:
-        connection = oracledb.connect(
-            user=config.DB_USER,
-            password=config.DB_PASSWORD,
-            dsn=config.DB_DSN
-        )
+        query = text("""
+                SELECT AVG(에너지_KCAL), 
+                       AVG(탄수화물_G), 
+                       AVG(당류_G), 
+                       AVG(단백질_G), 
+                       AVG(지방_G), 
+                       AVG(나트륨_MG)
+                FROM RAMEN_NUTRITION 
+                """)
 
-        cursor = connection.cursor()
+        with engine.connect() as connection:
+            result = connection.execute(query)
+            row = result.fetchone()
 
-        query = """
-            SELECT
-                AVG(에너지_KCAL),
-                AVG(탄수화물_G),
-                AVG(당류_G),
-                AVG(단백질_G),
-                AVG(지방_G),
-                AVG(나트륨_MG)
-            FROM RAMEN_NUTRITION
-        """
+            if row is None:
+                return None
 
-        cursor.execute(query)
-        row = cursor.fetchone()
-
-        if row is None:
-            return None
-
-        return {
-            "calories": round(row[0] or 0, 1),
-            "carbs": round(row[1] or 0, 1),
-            "sugar": round(row[2] or 0, 1),
-            "protein": round(row[3] or 0, 1),
-            "fat": round(row[4] or 0, 1),
-            "sodium": round(row[5] or 0, 1),
-        }
+            return {
+                "calories": round(row[0] or 0, 1),
+                "carbs": round(row[1] or 0, 1),
+                "sugar": round(row[2] or 0, 1),
+                "protein": round(row[3] or 0, 1),
+                "fat": round(row[4] or 0, 1),
+                "sodium": round(row[5] or 0, 1),
+            }
 
     except Exception as e:
         print("DB 평균 조회 오류:", e)
         return None
-
-    finally:
-        if cursor:
-            cursor.close()
-        if connection:
-            connection.close()
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
@@ -195,11 +116,7 @@ async def predict(file: UploadFile = File(...)):
 
     # 2. ★ 중요: model('C:/...') 대신, 위에서 안전하게 열어둔 'image_data' 변수를 그대로 던집니다!
     # 이렇게 해야 YOLO가 경로를 다시 안 찾아가고 메모리에 로드된 사진을 그대로 분석합니다.
-<<<<<<< HEAD
     results = model(image_data, conf=0.8, imgsz=640)
-=======
-    results = model(image_data, conf=0.5, imgsz=640)
->>>>>>> origin/master
 
     detected_class = None
     confidence = 0.0
@@ -241,9 +158,8 @@ async def predict(file: UploadFile = File(...)):
 # 프론트엔드에서 API 호출할 수 있게 CORS 허용
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173"],  # 개발 중에는 전체 허용, 배포 시 프론트 주소로 제한 가능
+    allow_origins=["http://localhost:5173",
+                   "http://127.0.0.1:5173"],  # 개발 중에는 전체 허용, 배포 시 프론트 주소로 제한 가능
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -323,6 +239,45 @@ def get_nutrition_result(detected_class: str):
             "messages": messages
         }
     }
+
+
+@app.get("/nutrition-by-name/{ramen_name}")
+def get_nutrition_by_name(ramen_name: str):
+    for item in nutrition_data:
+        # 데이터 샘플의 productName 키 사용
+        if item.get("productName") == ramen_name:
+            # 프론트가 인식 가능한 필드명으로 변환해서 반환
+            return {
+                "name": item["productName"],
+                "calories": f"{item['calories']} kcal",
+                "protein": f"{item['protein']} g",
+                "fat": f"{item['fat']} g",
+                "carbs": f"{item['carbohydrate']} g",
+                "sugar": f"{item['sugar']} g",
+                "sodium": f"{item['sodium']} mg",
+                "weight": f"{item['weightG']}g",
+                "brand": "알 수 없음"
+            }
+    return {"error": "Not found"}
+
+@app.post("/feedback")
+async def save_feedback(feedback: RamenFeedback):
+    # 디버깅용: 데이터가 어떻게 들어오는지 확인
+    print(f"DEBUG: 수신된 피드백 데이터: {feedback.dict()}")
+
+    query = text("""
+                 INSERT INTO RAMEN_FEEDBACK
+                 (detected_class, detected_name, is_correct, corrected_ramen, confidence)
+                 VALUES (:detected_class, :detected_name, :is_correct, :corrected_ramen, :confidence)
+                 """)
+
+    try:
+        with engine.begin() as connection:
+            connection.execute(query, feedback.dict())
+        return {"success": True}
+    except Exception as e:
+        print(f"DB 저장 에러: {e}")
+        return {"success": False, "message": str(e)}
 
 
 if __name__ == "__main__":

@@ -184,7 +184,7 @@ function RamenScanner() {
         setResult(data);
         setErrorMessage("");
         setScanStatus("success");
-        setStatusMessage("라면 인식 및 Oracle DB 조회에 성공했습니다.");
+        setStatusMessage("라면 인식 및 DB 조회에 성공했습니다.");
         return;
       }
 
@@ -247,7 +247,7 @@ function RamenScanner() {
       <Header />
 
       <main className="top-layout">
-        <ResultPanel result={result} errorMessage={errorMessage} />
+        <ResultPanel result={result} setResult={setResult} errorMessage={errorMessage} />
 
         <ScannerPanel
           videoRef={videoRef}
