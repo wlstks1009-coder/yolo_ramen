@@ -6,6 +6,11 @@ oracledb
 ultralytics
 pillow
 pandas
+<<<<<<< HEAD
 opencv-python
 python-multipart
 config
+=======
+pymysql
+sqlalchemy
+>>>>>>> origin/master

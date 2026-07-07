@@ -1,6 +1,6 @@
 #import
 import io
-import oracledb  # 오라클 연결 라이브러리
+import pymysql  # 오라클 연결 라이브러리
 from fastapi import FastAPI, UploadFile, File
 from ultralytics import YOLO
 from PIL import Image
@@ -8,11 +8,17 @@ import config
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import json
+<<<<<<< HEAD
 
+=======
+from textwrap import dedent
+from sqlalchemy import text
+>>>>>>> origin/master
 
 app = FastAPI()
 
 # 1. YOLOv8 모델 로드
+<<<<<<< HEAD
 MODEL_PATH = "ramen_yolo11n_best.pt"
 YOLO_CONFIDENCE = 0.8
 YOLO_IMAGE_SIZE = 640
@@ -53,6 +59,52 @@ def get_ramen_info_from_db(yolo_class_name):
 
         if row is None:
             return None
+=======
+model = YOLO("yolo11n_ver2.pt")
+
+engine = config.get_engine()
+
+
+def get_ramen_info_from_db(yolo_class_name):
+    """SQLAlchemy Engine을 사용해 마리아DB에서 라면 정보를 조회하는 함수"""
+
+    query = dedent("""
+                   SELECT 식품명,
+                          에너지_KCAL,
+                          단백질_G,
+                          지방_G,
+                          탄수화물_G,
+                          당류_G,
+                          나트륨_MG,
+                          식품중량,
+                          제조사명
+                   FROM RAMEN_NUTRITION
+                   WHERE YOLO_CLASS = :class_name
+                   """)
+
+    try:
+        with engine.connect() as connection:
+            result = connection.execute(text(query), {"class_name": yolo_class_name})
+            row = result.fetchone()
+
+        if row:
+            return {
+                "name": row[0],
+                "calories": f"{row[1]} kcal",
+                "protein": f"{row[2]} g",
+                "fat": f"{row[3]} g",
+                "carbs": f"{row[4]} g",
+                "sugar": f"{row[5]} g",
+                "sodium": f"{row[6]} mg",
+                "weight": row[7],
+                "brand": row[8]
+            }
+        return None
+
+    except Exception as e:
+        print(f"❌ 마리아DB(SQLAlchemy) 에러: {e}")
+        return None
+>>>>>>> origin/master
 
         return {
             "name": row[0],
@@ -143,7 +195,11 @@ async def predict(file: UploadFile = File(...)):
 
     # 2. ★ 중요: model('C:/...') 대신, 위에서 안전하게 열어둔 'image_data' 변수를 그대로 던집니다!
     # 이렇게 해야 YOLO가 경로를 다시 안 찾아가고 메모리에 로드된 사진을 그대로 분석합니다.
+<<<<<<< HEAD
     results = model(image_data, conf=0.8, imgsz=640)
+=======
+    results = model(image_data, conf=0.5, imgsz=640)
+>>>>>>> origin/master
 
     detected_class = None
     confidence = 0.0
@@ -159,10 +215,9 @@ async def predict(file: UploadFile = File(...)):
     print(f"▶ [2 단계] YOLO 검출 결과 -> 클래스: {detected_class}, 신뢰도: {confidence}")
 
     if detected_class:
-        # 오라클 DB에서 실시간 영양성분 꺼내오기
         db_info = get_ramen_info_from_db(detected_class)
 
-        print(f"▶ [3 단계] 오라클 DB 조회 결과: {db_info}")
+        print(f"▶ [3 단계] DB 조회 결과: {db_info}")
 
         if db_info:
             average_info = get_average_nutrition_from_db()

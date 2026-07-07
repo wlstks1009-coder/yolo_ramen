@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>실시간 라면 자동 인식기 (Oracle DB 연동)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Malgun Gothic', sans-serif; text-align: center; background: #fafafa; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; display: flex; gap: 20px; justify-content: center; }
-        .view-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 48%; min-height: 450px; }
+        .container { max-width: 1200px; margin: 0 auto; display: flex; gap: 20px; justify-content: center; align-items: flex-start; }
+        .view-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 32%; min-height: 520px; }
         video, img { width: 100%; border-radius: 8px; background: #000; transform: scaleX(-1); }
         .hidden { display: none; }
         .status-scanner { font-weight: bold; color: #3498db; animation: blink 1.5s infinite; margin: 10px 0; }
         @keyframes blink { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
         button { background: #2ecc71; color: white; border: none; padding: 12px 30px; font-size: 16px; border-radius: 6px; cursor: pointer; margin-top: 15px; font-weight: bold; }
         button:hover { background: #27ae60; }
-        table { width: 100%; margin-top: 15px; border-collapse: collapse; text-align: left; font-size: 14px; }
-        th, td { padding: 10px; border-bottom: 1px solid #edf2f7; }
-        th { background: #f7fafc; color: #4a5568; width: 40%; }
+        table { width: 100%; margin-top: 15px; border-collapse: collapse; text-align: left; font-size: 13px; }
+        th, td { padding: 8px; border-bottom: 1px solid #edf2f7; }
+        th { background: #f7fafc; color: #4a5568; width: 45%; }
+        /* ⭐ 차트 컨테이너 스타일 */
+        .chart-container { width: 100%; height: 320px; margin-top: 20px; position: relative; }
     </style>
 </head>
 <body>
 
-    <h1>🤖 실시간 라면 자동 스캐너 (Oracle 연동)</h1>
-    <p>카메라에 라면 봉지를 비추면 오라클 DB에서 실시간 영양성분을 가져옵니다.</p>
+    <h1>🤖 실시간 라면 자동 스캐너 </h1>
+    <p>카메라에 라면 봉지를 비추면 영양성분을 조회하고 평균값과 비교 시각화합니다.</p>
 
     <div class="container">
         <div class="view-box">
@@ -33,22 +36,30 @@
         </div>
 
         <div class="view-box">
-            <h3>📊 오라클 DB 영양성분 정보</h3>
+            <h3>📊 라면 영양성분 정보</h3>
             <div id="result-status" style="margin-top: 20px; color: #718096;">라면이 감지되면 DB 정보를 조회합니다.</div>
 
             <div id="info-table" class="hidden">
                 <h2 id="ramen-name" style="color: #2ecc71; margin-bottom: 5px;">-</h2>
                 <p style="font-size: 13px; color: #718096; margin-top: 0;">제조사: <span id="ramen-brand">-</span> | 정확도: <span id="ramen-conf">-</span></p>
                 <table>
-                    <tr><th>항목 (100g 기준)</th><th>검색된 DB 데이터</th></tr>
+                    <tr><th>항목(100g 기준)</th><th>검색된 DB 데이터</th></tr>
                     <tr><td>총 중량</td><td id="val-weight">-</td></tr>
                     <tr><td>열량 (칼로리)</td><td id="val-calories">-</td></tr>
                     <tr><td>탄수화물</td><td id="val-carbs">-</td></tr>
                     <tr><td>당류</td><td id="val-sugar">-</td></tr>
-                    <tr><td>단백질</td><td id="val-protein">-</td></tr>
+                    <tr><td>단백질</td><td id="val-protein">-  </td></tr>
                     <tr><td>지방</td><td id="val-fat">-</td></tr>
                     <tr><td>나트륨</td><td id="val-sodium">-</td></tr>
                 </table>
+            </div>
+        </div>
+
+        <div class="view-box">
+            <h3>📈 평균 대비 영양성분 비교</h3>
+            <div id="chart-status" style="margin-top: 20px; color: #718096;">차트 분석 대기 중...</div>
+            <div id="chart-wrapper" class="chart-container hidden">
+                <canvas id="nutritionChart"></canvas>
             </div>
         </div>
     </div>
@@ -61,6 +72,9 @@
         const btnRetry = document.getElementById('btn-retry');
         let scanInterval = null;
         let isProcessing = false;
+
+        // ⭐ 차트 객체를 전역으로 관리 (다시 스캔할 때 초기화용)
+        let myChart = null;
 
         navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } })
             .then(stream => {
@@ -84,7 +98,6 @@
                 if(canvas.width === 0) return;
 
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
                 const currentBlobUrl = canvas.toDataURL('image/jpeg');
 
                 canvas.toBlob(blob => {
@@ -94,9 +107,9 @@
 
                     fetch('/upload_capture', {method: 'POST', body: formData})
                         .then(res => res.json())
-                        .then(data => {
+                        .then(async data => { // ⭐ async 추가 (내부에서 fetch를 동기적으로 쓰기 위함)
                             if (data.success) {
-                                clearInterval(scanInterval); // 감지되면 즉시 루프 중단
+                                clearInterval(scanInterval);
 
                                 preview.src = currentBlobUrl;
                                 preview.classList.remove('hidden');
@@ -108,19 +121,29 @@
                                 document.getElementById('result-status').classList.add('hidden');
                                 document.getElementById('info-table').classList.remove('hidden');
 
-                                // 오라클에서 받아온 데이터 화면 정렬
-                                document.getElementById('ramen-name').innerText = data.info.name;
-                                document.getElementById('ramen-brand').innerText = data.info.brand;
+                                // 오라클 데이터 화면 바인딩
+                                document.getElementById('ramen-name').innerText = data.info.name || "알 수 없는 라면";
+                                document.getElementById('ramen-brand').innerText = data.info.brand || "제조사 미정";
                                 document.getElementById('ramen-conf').innerText = data.confidence;
-                                document.getElementById('val-weight').innerText = data.info.weight;
-                                document.getElementById('val-calories').innerText = data.info.calories;
-                                document.getElementById('val-carbs').innerText = data.info.carbs;
-                                document.getElementById('val-sugar').innerText = data.info.sugar;
-                                document.getElementById('val-protein').innerText = data.info.protein;
-                                document.getElementById('val-fat').innerText = data.info.fat;
-                                document.getElementById('val-sodium').innerText = data.info.sodium;
+
+                                document.getElementById('val-weight').innerText = data.info.weight ? data.info.weight + " " : "-";
+                                document.getElementById('val-calories').innerText = data.info.calories || "-";
+                                document.getElementById('val-carbs').innerText = data.info.carbs || "-";
+                                document.getElementById('val-sugar').innerText = data.info.sugar || "-";
+                                document.getElementById('val-protein').innerText = data.info.protein || "-";
+                                document.getElementById('val-fat').innerText = data.info.fat || "-";
+                                document.getElementById('val-sodium').innerText = data.info.sodium || "-";
+
+                                // ⭐ [핵심 추가] 전체 평균 가져와서 그래프 그리기 시작
+                                try {
+                                    const allData = await fetchAllNutrition();
+                                    drawComparisonChart(data.info, allData);
+                                } catch(e) {
+                                    console.error("차트 로드 실패:", e);
+                                    document.getElementById('chart-status').innerText = "⚠️ 차트 데이터를 불러오지 못했습니다.";
+                                }
+
                             } else {
-                                // 인식에 실패했다면 문을 열어주어 다음 0.5초 뒤 타이머가 정상 작동하게 합니다.
                                 isProcessing = false;
                             }
                         }).catch(err => {
@@ -138,31 +161,106 @@
             document.getElementById('info-table').classList.add('hidden');
             document.getElementById('result-status').classList.remove('hidden');
             document.getElementById('result-status').innerText = "라면이 감지되면 DB 정보를 조회합니다.";
+
+            // ⭐ 차트 영역도 초기화
+            if (myChart) { myChart.destroy(); }
+            document.getElementById('chart-wrapper').classList.add('hidden');
+            document.getElementById('chart-status').classList.remove('hidden');
+            document.getElementById('chart-status').innerText = "차트 분석 대기 중...";
+
             startScanning();
         }
 
-        async function fetchNutritionResult(detectedClass) {
-  const response = await fetch(
-    `http://127.0.0.1:8000/nutrition-result/${detectedClass}`
-  );
+        // ⭐ 10개 클래스 전체 조회용 오리지널 함수
+        async function fetchAllNutrition() {
+            const response = await fetch("http://127.0.0.1:8000/nutrition");
+            return await response.json();
+        }
 
-  const data = await response.json();
+        // ⭐ [시각화 치트키 함수] 데이터 가공 및 그래프 렌더링
+        // ⭐ [시각화 치트키 함수] 데이터 가공 및 그래프 렌더링
+function drawComparisonChart(currentRamen, allRamenList) {
+    document.getElementById('chart-status').className = "hidden";
+    document.getElementById('chart-wrapper').classList.remove('hidden');
 
-  console.log(data);
+    // 💡 문자열에서 숫자만 안전하게 추출하는 보조 함수
+    const parseNum = (val) => {
+        if (!val) return 0;
+        const cleaned = String(val).replace(/[^0-9.]/g, '');
+        return parseFloat(cleaned) || 0;
+    };
 
-  return data;
+    // 1. 10개 라면의 각 성분 평균값 계산 로직 (백엔드 기존 키값 기준)
+    const count = allRamenList.length || 1;
+    let sumCarbs = 0, sumSugar = 0, sumProtein = 0, sumFat = 0, sumCalories = 0;
+    console.log(allRamenList)
+
+    allRamenList.forEach(item => {
+        sumCarbs += parseNum(item.carbohydrate);
+        sumSugar += parseNum(item.sugar);
+        sumProtein += parseNum(item.protein);
+        sumFat += parseNum(item.fat);
+        sumCalories += parseNum(item.calories);
+    });
+
+    const avgCarbs = (sumCarbs / count).toFixed(1);
+    const avgSugar = (sumSugar / count).toFixed(1);
+    const avgProtein = (sumProtein / count).toFixed(1);
+    const avgFat = (sumFat / count).toFixed(1);
+    const avgCalories = (sumCalories / count).toFixed(0);
+
+    // 2. 현재 인식한 라면 데이터 가공
+    const curCarbs = parseNum(currentRamen.carbs);
+    const curSugar = parseNum(currentRamen.sugar);
+    const curProtein = parseNum(currentRamen.protein);
+    const curFat = parseNum(currentRamen.fat);
+    const curCalories = parseNum(currentRamen.calories).toFixed(0);
+
+    const labelName = currentRamen.name || "현재 라면";
+
+    // 3. 튀는 칼로리는 우측 박스 타이틀 옆에 텍스트로 강조해서 배치
+    const titleBox = document.querySelector('.view-box:nth-child(3) h3');
+    if (titleBox) {
+        titleBox.innerHTML = `📈 영양성분 비교 <br><span style='font-size:12px; color:#e74c3c;'>🔥 열량: ${curCalories}kcal (평균 ${avgCalories}kcal)</span>`;
+    }
+
+    // 4. 차트 리빌딩 (탄수화물, 당류, 단백질, 지방 4대 중량 성분 밸런스 매칭)
+    const ctx = document.getElementById('nutritionChart').getContext('2d');
+    if (myChart) { myChart.destroy(); }
+
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['탄수화물(g)', '당류(g)', '단백질(g)', '지방(g)'],
+            datasets: [
+                {
+                    label: labelName,
+                    data: [curCarbs, curSugar, curProtein, curFat],
+                    backgroundColor: 'rgba(46, 204, 113, 0.6)',
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: '라면 전체 평균',
+                    data: [avgCarbs, avgSugar, avgProtein, avgFat],
+                    backgroundColor: 'rgba(160, 174, 192, 0.6)',
+                    borderColor: 'rgba(160, 174, 192, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: '중량 (g)' }
+                }
+            }
+        }
+    });
 }
-
-async function fetchAllNutrition() {
-  const response = await fetch("http://127.0.0.1:8000/nutrition");
-  const data = await response.json();
-
-  console.log(data);
-
-  return data;
-}
-
-
     </script>
 </body>
 </html>
