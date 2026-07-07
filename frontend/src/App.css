@@ -1,0 +1,633 @@
+/* ============================= */
+/* Global reset / root */
+/* ============================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: initial !important;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  background: #f4f7fb;
+  color: #1f2937;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ============================= */
+/* Page layout */
+/* ============================= */
+
+.app-shell {
+  width: min(1480px, calc(100% - 36px));
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 24px 0 44px;
+}
+
+.top-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.25fr 0.9fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.bottom-layout {
+  margin-top: 18px;
+  overflow-x: visible;
+}
+
+.top-layout > .panel {
+  min-height: 460px;
+}
+
+/* ============================= */
+/* Header */
+/* ============================= */
+
+.header-card {
+  background: linear-gradient(135deg, #ffffff, #eef7ff);
+  border: 1px solid #e5edf7;
+  border-radius: 24px;
+  padding: 26px 30px;
+  box-shadow: 0 18px 40px rgba(30, 64, 175, 0.08);
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #2563eb;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.header-card h1 {
+  margin: 0;
+  font-size: 32px;
+  letter-spacing: -0.04em;
+}
+
+.header-desc {
+  margin: 12px 0 0;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* ============================= */
+/* Common panel */
+/* ============================= */
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+}
+
+.panel h2 {
+  margin: 0 0 12px;
+  font-size: 21px;
+  letter-spacing: -0.03em;
+}
+
+.panel p {
+  margin: 0;
+}
+
+.empty-text {
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 12px !important;
+}
+
+.sub-text {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 16px !important;
+}
+
+/* ============================= */
+/* Scanner panel */
+/* ============================= */
+
+.scanner-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panel-title-row p {
+  color: #64748b;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.status-badge.idle {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.status-badge.scanning {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-badge.success {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-badge.db-error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-badge.error {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.scanner-window {
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 4 / 3;
+  margin: 0 auto;
+  background: #0f172a;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #111827;
+}
+
+.scanner-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-layer {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(-1);
+}
+
+.media-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preview-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.hidden-canvas {
+  display: none;
+}
+
+.status-message {
+  margin-top: 14px !important;
+  color: #475569;
+  font-size: 14px;
+  min-height: 22px;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.primary-button,
+.danger-button {
+  border: none;
+  border-radius: 12px;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primary-button {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.26);
+}
+
+.danger-button {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.18);
+}
+
+.danger-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(239, 68, 68, 0.25);
+}
+
+/* ============================= */
+/* Result panel */
+/* ============================= */
+
+.result-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.result-label {
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 6px !important;
+}
+
+.result-header h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.brand-text {
+  color: #64748b;
+  margin-top: 8px !important;
+}
+
+.confidence-box {
+  min-width: 94px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+}
+
+.confidence-box span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.confidence-box strong {
+  font-size: 20px;
+  color: #16a34a;
+}
+
+.class-name-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 12px 14px;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.class-name-box strong {
+  color: #0f172a;
+}
+
+.nutrition-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: auto;
+}
+
+.nutrition-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.nutrition-icon {
+  font-size: 22px;
+}
+
+.nutrition-card p {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.nutrition-card strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+}
+
+.empty-result {
+  flex: 1;
+  min-height: 250px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #64748b;
+  text-align: center;
+  padding: 24px;
+  background: #f8fafc;
+}
+
+.empty-result p {
+  font-size: 18px;
+  font-weight: 800;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.empty-result span {
+  font-size: 14px;
+}
+
+.error-box {
+  background: #fff7f7;
+  border-color: #fecaca;
+}
+
+.error-box p {
+  color: #b91c1c;
+}
+
+/* ============================= */
+/* Nutrition table */
+/* ============================= */
+
+.nutrition-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.nutrition-table th,
+.nutrition-table td {
+  padding: 13px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  font-size: 14px;
+}
+
+.nutrition-table th {
+  width: 35%;
+  color: #475569;
+  background: #f8fafc;
+}
+
+.nutrition-table td {
+  color: #111827;
+  font-weight: 700;
+}
+
+/* ============================= */
+/* Average vertical comparison */
+/* ============================= */
+
+.vertical-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+.vertical-compare-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 12px;
+  min-height: 210px;
+}
+
+.vertical-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.vertical-card-header strong {
+  font-size: 14px;
+  color: #111827;
+}
+
+.vertical-card-header span {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.compare-high {
+  color: #dc2626;
+}
+
+.compare-low {
+  color: #2563eb;
+}
+
+.vertical-chart {
+  height: 145px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.vertical-bar-group {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bar-value {
+  height: 26px;
+  font-size: 10px;
+  color: #475569;
+  font-weight: 700;
+  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+.bar-track {
+  width: 26px;
+  flex: 1;
+  background: #e2e8f0;
+  border-radius: 999px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.vertical-bar {
+  width: 100%;
+  border-radius: 999px 999px 0 0;
+  min-height: 6px;
+  transition: height 0.3s ease;
+}
+
+.current-bar.high {
+  background: linear-gradient(180deg, #f97316, #ef4444);
+}
+
+.current-bar.low {
+  background: linear-gradient(180deg, #22c55e, #2563eb);
+}
+
+.average-bar {
+  background: linear-gradient(180deg, #94a3b8, #64748b);
+}
+
+.bar-label {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #334155;
+  font-weight: 800;
+}
+
+/* ============================= */
+/* Responsive */
+/* ============================= */
+
+@media (max-width: 1150px) {
+  .app-shell {
+    width: min(100%, calc(100% - 28px));
+  }
+
+  .top-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .top-layout > .panel {
+    min-height: auto;
+  }
+
+  /* 세로 화면에서는 스캔 영역을 먼저 보여줌 */
+  .scanner-panel {
+    order: 1;
+  }
+
+  .result-panel {
+    order: 2;
+  }
+
+  .top-layout > .panel:nth-child(3) {
+    order: 3;
+  }
+
+  .scanner-window {
+    max-width: 680px;
+  }
+
+  .vertical-compare-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: min(100%, calc(100% - 20px));
+    padding: 18px 0 32px;
+  }
+
+  .header-card h1 {
+    font-size: 26px;
+  }
+
+  .result-header {
+    flex-direction: column;
+  }
+
+  .confidence-box {
+    width: 100%;
+  }
+
+  .nutrition-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vertical-compare-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .vertical-compare-card {
+    padding: 8px;
+  }
+
+  .vertical-chart {
+    gap: 8px;
+  }
+
+  .bar-track {
+    width: 22px;
+  }
+}

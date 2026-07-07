@@ -1,11 +1,16 @@
-ultralytics 
-Pillow 
 fastapi
-uvicorn 
-python-multipart
-flask 
+uvicorn
+flask
 requests
 oracledb
+ultralytics
+pillow
 pandas
+<<<<<<< HEAD
+opencv-python
+python-multipart
+config
+=======
 pymysql
 sqlalchemy
+>>>>>>> origin/master
