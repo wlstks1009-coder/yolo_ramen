@@ -1,7 +1,3 @@
-/* ============================= */
-/* Global reset / root */
-/* ============================= */
-
 * {
   box-sizing: border-box;
 }
@@ -15,168 +11,212 @@ body,
   padding: 0;
 }
 
-#root {
-  max-width: none !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  text-align: initial !important;
-}
-
 body {
-  margin: 0;
   overflow-x: hidden;
-  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
-  background: #f4f7fb;
-  color: #1f2937;
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
+  background: #f4f8f3;
+  color: #102116;
 }
 
-button {
+button,
+select {
   font-family: inherit;
 }
 
-/* ============================= */
-/* Page layout */
-/* ============================= */
+button {
+  cursor: pointer;
+}
 
 .app-shell {
-  width: min(1480px, calc(100% - 36px));
-  max-width: 1480px;
-  margin: 0 auto;
-  padding: 24px 0 44px;
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 36px;
 }
 
-.top-layout {
-  display: grid;
-  grid-template-columns: 0.9fr 1.25fr 0.9fr;
-  gap: 16px;
-  align-items: stretch;
+/* ================= Header ================= */
+
+.top-header {
+  height: 58px;
+  padding: 0 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #dfe8df;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.bottom-layout {
-  margin-top: 18px;
-  overflow-x: visible;
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.top-layout > .panel {
-  min-height: 460px;
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: #e8f5ec;
+  border: 1px solid #cfe8d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
 }
 
-/* ============================= */
-/* Header */
-/* ============================= */
-
-.header-card {
-  background: linear-gradient(135deg, #ffffff, #eef7ff);
-  border: 1px solid #e5edf7;
-  border-radius: 24px;
-  padding: 26px 30px;
-  box-shadow: 0 18px 40px rgba(30, 64, 175, 0.08);
-  margin-bottom: 18px;
-}
-
-.eyebrow {
-  margin: 0 0 8px;
-  color: #2563eb;
-  font-weight: 800;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.header-card h1 {
+.brand-area h1 {
   margin: 0;
-  font-size: 32px;
+  font-size: 18px;
+  line-height: 1.1;
+  color: #168243;
   letter-spacing: -0.04em;
 }
 
-.header-desc {
-  margin: 12px 0 0;
-  color: #64748b;
-  line-height: 1.6;
+.brand-area p {
+  margin: 3px 0 0;
+  font-size: 11px;
+  color: #667085;
 }
 
-/* ============================= */
-/* Common panel */
-/* ============================= */
+/* ================= Page structure ================= */
+
+.reference-page {
+  width: calc(100vw - 40px) !important;
+  max-width: none !important;
+  margin: 18px auto 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 330px minmax(0, 1fr) 360px !important;
+  grid-template-areas:
+    "scan result result"
+    "history compare detail" !important;
+
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+.cell {
+  min-width: 0;
+}
+
+.cell-scan {
+  grid-area: scan;
+  display: flex;
+}
+
+.cell-result {
+  grid-area: result;
+  display: flex;
+}
+
+.cell-history {
+  grid-area: history;
+}
+
+.cell-compare {
+  grid-area: compare;
+  display: flex;
+}
+
+.cell-detail {
+  grid-area: detail;
+  display: flex;
+}
+
+.cell-scan > .panel,
+.cell-result > .panel,
+.cell-compare > .panel,
+.cell-detail > .panel,
+.cell-history.panel {
+  width: 100%;
+  height: 100%;
+}
+
+/* ================= Common card ================= */
 
 .panel {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+  border: 1px solid #dfe8df;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 8px 22px rgba(33, 71, 45, 0.055);
 }
 
 .panel h2 {
-  margin: 0 0 12px;
-  font-size: 21px;
+  margin: 0;
+  font-size: 15px;
   letter-spacing: -0.03em;
+  color: #102116;
 }
 
 .panel p {
   margin: 0;
 }
 
-.empty-text {
-  color: #64748b;
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 14px;
-  padding: 24px;
-  text-align: center;
-  margin-top: 12px !important;
-}
-
-.sub-text {
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 16px !important;
-}
-
-/* ============================= */
-/* Scanner panel */
-/* ============================= */
-
-.scanner-panel {
-  display: flex;
-  flex-direction: column;
-}
-
+.section-title-row,
 .panel-title-row {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.section-title-row span {
+  color: #168243;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .panel-title-row p {
-  color: #64748b;
-  margin-top: 6px;
-  font-size: 14px;
+  margin-top: 5px;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.45;
 }
+
+.empty-text {
+  color: #667085;
+  background: #f7faf7;
+  border: 1px dashed #cfdccf;
+  border-radius: 13px;
+  padding: 16px;
+  text-align: center;
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+.empty-text.compact {
+  padding: 14px;
+}
+
+.sub-text {
+  margin: 7px 0 10px !important;
+  color: #667085;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+/* ================= Status ================= */
 
 .status-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
 }
 
 .status-badge.idle {
-  background: #f1f5f9;
-  color: #475569;
+  background: #f1f5f2;
+  color: #667085;
 }
 
 .status-badge.scanning {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #e8f5ec;
+  color: #168243;
 }
 
 .status-badge.success {
@@ -184,26 +224,33 @@ button {
   color: #15803d;
 }
 
+.status-badge.error,
 .status-badge.db-error {
   background: #fee2e2;
   color: #b91c1c;
 }
 
-.status-badge.error {
-  background: #ffedd5;
-  color: #c2410c;
+.success-chip {
+  background: #e8f5ec;
+  color: #168243 !important;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* ================= Scanner ================= */
+
+.scanner-panel {
+  min-height: 0;
 }
 
 .scanner-window {
   width: 100%;
-  max-width: 640px;
-  aspect-ratio: 4 / 3;
-  margin: 0 auto;
-  background: #0f172a;
-  border-radius: 18px;
+  height: 210px;
+  background: #f7faf7;
+  border: 1px solid #dfe8df;
+  border-radius: 14px;
   overflow: hidden;
   position: relative;
-  border: 1px solid #111827;
 }
 
 .scanner-media {
@@ -219,15 +266,15 @@ button {
   transform: scaleX(-1);
 }
 
-.media-hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .preview-layer {
   position: absolute;
   inset: 0;
   z-index: 2;
+}
+
+.media-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .hidden-canvas {
@@ -235,178 +282,241 @@ button {
 }
 
 .status-message {
-  margin-top: 14px !important;
-  color: #475569;
-  font-size: 14px;
-  min-height: 22px;
+  min-height: 32px;
+  margin-top: 10px !important;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .button-row {
   display: flex;
   gap: 10px;
-  margin-top: 16px;
+  margin-top: 10px;
 }
 
 .primary-button,
 .danger-button {
+  flex: 1;
   border: none;
-  border-radius: 12px;
-  padding: 13px 18px;
-  font-size: 15px;
+  border-radius: 11px;
+  padding: 11px 12px;
+  font-size: 13px;
   font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .primary-button {
-  background: #2563eb;
-  color: white;
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
-}
-
-.primary-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.26);
+  background: #168243;
+  color: #ffffff;
 }
 
 .danger-button {
   background: #ef4444;
-  color: white;
-  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.18);
+  color: #ffffff;
 }
 
-.danger-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 24px rgba(239, 68, 68, 0.25);
-}
+/* ================= History ================= */
 
-/* ============================= */
-/* Result panel */
-/* ============================= */
-
-.result-panel {
+.cell-history {
   display: flex;
   flex-direction: column;
 }
 
-.result-header {
+.history-list {
   display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: flex-start;
-  margin-bottom: 14px;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.history-item {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 8px;
+  border-radius: 14px;
+  background: #f7faf7;
+  border: 1px solid #e4eee4;
+}
+
+.history-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #e8f5ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.history-info {
+  min-width: 0;
+}
+
+.history-info strong {
+  display: block;
+  color: #102116;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-info span {
+  display: block;
+  color: #667085;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.history-confidence {
+  background: #e8f5ec;
+  color: #168243;
+  border-radius: 999px;
+  padding: 5px 7px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* 빈 기록 문구가 카드 안을 채우게 */
+.cell-history .empty-text {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+/* ================= Result ================= */
+
+.result-panel {
+  min-height: 0;
+  overflow: visible;
+}
+
+.result-hero {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.result-image-box {
+  width: 210px;
+  height: 210px;
+  border-radius: 14px;
+  border: 1px solid #dfe8df;
+  background: #f7faf7;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.result-image-box span {
+  font-size: 48px;
+}
+
+.result-main-info {
+  min-width: 0;
 }
 
 .result-label {
-  color: #2563eb;
-  font-size: 13px;
+  color: #168243;
+  font-size: 12px;
   font-weight: 800;
-  margin-bottom: 6px !important;
+  margin-bottom: 7px !important;
 }
 
-.result-header h2 {
+.result-main-info h3 {
   margin: 0;
-  font-size: 28px;
+  font-size: 31px;
+  line-height: 1.12;
+  letter-spacing: -0.05em;
+  color: #111827;
 }
 
 .brand-text {
-  color: #64748b;
-  margin-top: 8px !important;
+  color: #667085;
+  margin-top: 7px !important;
+  font-size: 12px;
 }
 
-.confidence-box {
-  min-width: 94px;
-  padding: 12px;
-  background: #f8fafc;
-  border-radius: 16px;
-  text-align: center;
-  border: 1px solid #e2e8f0;
+.confidence-area {
+  margin-top: 14px;
 }
 
-.confidence-box span {
+.confidence-area span {
   display: block;
-  color: #64748b;
+  color: #667085;
   font-size: 12px;
   margin-bottom: 4px;
 }
 
-.confidence-box strong {
-  font-size: 20px;
-  color: #16a34a;
-}
-
-.class-name-box {
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 14px;
-  padding: 12px 14px;
-  color: #64748b;
-  font-size: 14px;
-  margin-bottom: 18px;
-}
-
-.class-name-box strong {
-  color: #0f172a;
-}
-
-.nutrition-card-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 20px;
-  margin-bottom: 24px;
-}
-
-.nutrition-card {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.nutrition-icon {
-  font-size: 22px;
-}
-
-.nutrition-card p {
-  margin-top: 8px;
-  color: #64748b;
-  font-size: 13px;
-}
-
-.nutrition-card strong {
+.confidence-area strong {
   display: block;
-  margin-top: 5px;
-  font-size: 22px;
-  letter-spacing: -0.03em;
+  color: #168243;
+  font-size: 31px;
+  line-height: 1;
+}
+
+.confidence-track {
+  height: 7px;
+  background: #e4eee4;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1f9d55, #168243);
+  border-radius: 999px;
+}
+
+.class-name-text {
+  margin-top: 10px !important;
+  color: #667085;
+  font-size: 12px;
+}
+
+.class-name-text strong {
+  color: #102116;
 }
 
 .empty-result {
-  flex: 1;
-  min-height: 250px;
-  border: 1px dashed #cbd5e1;
-  border-radius: 18px;
+  min-height: 205px;
+  border: 1px dashed #cfdccf;
+  border-radius: 14px;
+  background: #f7faf7;
+  color: #667085;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  color: #64748b;
+  justify-content: center;
+  gap: 6px;
   text-align: center;
-  padding: 24px;
-  background: #f8fafc;
+  padding: 18px;
+  margin-top: 10px;
 }
 
 .empty-result p {
-  font-size: 18px;
+  color: #102116;
+  font-size: 16px;
   font-weight: 800;
-  color: #334155;
-  margin-bottom: 8px;
 }
 
 .empty-result span {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .error-box {
@@ -418,73 +528,166 @@ button {
   color: #b91c1c;
 }
 
-/* ============================= */
-/* Nutrition table */
-/* ============================= */
+/* ================= Nutrition cards ================= */
 
-.nutrition-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 14px;
-  overflow: hidden;
+.nutrition-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid #e4eee4;
+  margin-top: 15px;
+}
+
+.nutrition-card {
+  padding: 12px 10px;
+  border-right: 1px solid #e4eee4;
+  background: #ffffff;
+}
+
+.nutrition-card:last-child {
+  border-right: none;
+}
+
+.nutrition-icon {
+  font-size: 18px;
+}
+
+.nutrition-card p {
+  margin-top: 6px;
+  color: #667085;
+  font-size: 12px;
+}
+
+.nutrition-card strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 18px;
+  color: #102116;
+  letter-spacing: -0.04em;
+}
+
+/* ================= Feedback ================= */
+
+.feedback-container {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f7faf7;
+  border: 1px solid #e4eee4;
   border-radius: 14px;
 }
 
-.nutrition-table th,
-.nutrition-table td {
-  padding: 13px 12px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-  font-size: 14px;
+.action-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
-.nutrition-table th {
-  width: 35%;
-  color: #475569;
-  background: #f8fafc;
+.action-box p {
+  font-weight: 800;
+  color: #102116;
 }
 
-.nutrition-table td {
-  color: #111827;
-  font-weight: 700;
+.button-row-full {
+  display: flex;
+  width: 100%;
+  max-width: 320px;
+  gap: 10px;
 }
 
-/* ============================= */
-/* Average vertical comparison */
-/* ============================= */
+.btn-yes,
+.btn-no,
+.btn-apply {
+  flex: 1;
+  border: none;
+  border-radius: 11px;
+  padding: 11px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.btn-yes,
+.btn-apply {
+  background: #168243;
+  color: white;
+}
+
+.btn-no {
+  background: #ef4444;
+  color: white;
+}
+
+.ramen-select {
+  width: min(100%, 260px);
+  padding: 11px;
+  border-radius: 11px;
+  border: 1px solid #cfdccf;
+  background: white;
+}
+
+.success-msg {
+  color: #168243;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* ================= Bottom cards ================= */
+
+.cell-compare > .panel,
+.cell-detail > .panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 255px;
+  overflow: visible;
+}
+
+.cell-compare .empty-text,
+.cell-detail .empty-text,
+.cell-compare .empty-compare-box,
+.cell-detail .empty-compare-box {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+}
+
+/* ================= Average compare ================= */
 
 .vertical-compare-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
   width: 100%;
-  min-width: 0;
 }
 
 .vertical-compare-card {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-  padding: 12px;
-  min-height: 210px;
+  background: #f7faf7;
+  border: 1px solid #e4eee4;
+  border-radius: 13px;
+  padding: 9px;
+  min-height: 132px;
 }
 
 .vertical-card-header {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 4px;
+  margin-bottom: 7px;
 }
 
 .vertical-card-header strong {
-  font-size: 14px;
-  color: #111827;
+  color: #102116;
+  font-size: 11px;
 }
 
 .vertical-card-header span {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 9px;
+  font-weight: 800;
 }
 
 .compare-high {
@@ -492,16 +695,16 @@ button {
 }
 
 .compare-low {
-  color: #2563eb;
+  color: #168243;
 }
 
 .vertical-chart {
-  height: 145px;
+  height: 78px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 12px;
-  padding-top: 8px;
+  gap: 9px;
+  padding-top: 6px;
 }
 
 .vertical-bar-group {
@@ -512,18 +715,18 @@ button {
 }
 
 .bar-value {
-  height: 26px;
-  font-size: 10px;
-  color: #475569;
-  font-weight: 700;
-  margin-bottom: 8px;
+  height: 16px;
+  font-size: 8px;
+  color: #667085;
+  font-weight: 800;
+  margin-bottom: 4px;
   white-space: nowrap;
 }
 
 .bar-track {
-  width: 26px;
+  width: 18px;
   flex: 1;
-  background: #e2e8f0;
+  background: #e4eee4;
   border-radius: 999px;
   display: flex;
   align-items: flex-end;
@@ -534,7 +737,6 @@ button {
   width: 100%;
   border-radius: 999px 999px 0 0;
   min-height: 6px;
-  transition: height 0.3s ease;
 }
 
 .current-bar.high {
@@ -542,155 +744,1178 @@ button {
 }
 
 .current-bar.low {
-  background: linear-gradient(180deg, #22c55e, #2563eb);
+  background: linear-gradient(180deg, #36c76b, #168243);
 }
 
 .average-bar {
-  background: linear-gradient(180deg, #94a3b8, #64748b);
+  background: linear-gradient(180deg, #a7dcb8, #72b982);
 }
 
 .bar-label {
-  margin-top: 8px;
-  font-size: 11px;
-  color: #334155;
+  margin-top: 4px;
+  font-size: 9px;
+  color: #475467;
   font-weight: 800;
 }
 
-/* ============================= */
-/* Responsive */
-/* ============================= */
+/* ================= Nutrition table ================= */
 
-@media (max-width: 1150px) {
-  .app-shell {
-    width: min(100%, calc(100% - 28px));
-  }
+.nutrition-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
 
-  .top-layout {
-    grid-template-columns: 1fr;
-  }
+.nutrition-table th,
+.nutrition-table td {
+  padding: 8px 9px;
+  border-bottom: 1px solid #e4eee4;
+  text-align: left;
+  font-size: 11px;
+}
 
-  .top-layout > .panel {
-    min-height: auto;
-  }
+.nutrition-table th {
+  width: 42%;
+  color: #667085;
+  background: #f7faf7;
+}
 
-  /* 세로 화면에서는 스캔 영역을 먼저 보여줌 */
-  .scanner-panel {
-    order: 1;
-  }
+.nutrition-table td {
+  color: #102116;
+  font-weight: 800;
+}
 
-  .result-panel {
-    order: 2;
-  }
+/* ================= Responsive ================= */
 
-  .top-layout > .panel:nth-child(3) {
-    order: 3;
-  }
-
-  .scanner-window {
-    max-width: 680px;
-  }
-
-  .vertical-compare-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+@media (max-width: 1360px) {
+  .reference-page {
+    width: calc(100vw - 32px) !important;
+    grid-template-columns: 310px minmax(0, 1fr) 320px !important;
   }
 }
 
-@media (max-width: 720px) {
-  .app-shell {
-    width: min(100%, calc(100% - 20px));
-    padding: 18px 0 32px;
-  }
-
-  .header-card h1 {
-    font-size: 26px;
-  }
-
-  .result-header {
-    flex-direction: column;
-  }
-
-  .confidence-box {
-    width: 100%;
-  }
-
-  .nutrition-card-grid {
+@media (max-width: 900px) {
+  .reference-page {
     grid-template-columns: 1fr;
-  }
-
-  .vertical-compare-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 6px;
-  }
-
-  .vertical-compare-card {
-    padding: 8px;
-  }
-
-  .vertical-chart {
-    gap: 8px;
-  }
-
-  .bar-track {
-    width: 22px;
+    grid-template-areas:
+      "scan"
+      "result"
+      "history"
+      "compare"
+      "detail";
   }
 }
 
-.feedback-container {
-  margin-top: 24px;
-  padding: 20px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+/* ===== 빈 상태 점선 박스 비율 통일 ===== */
+
+/* 모든 카드 내부를 세로 구조로 맞춤 */
+.cell-result .result-panel,
+.cell-history,
+.cell-compare > .panel,
+.cell-detail > .panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* 제목 줄은 위에 고정 */
+.cell-result .result-panel > h2,
+.cell-history .section-title-row,
+.cell-compare .section-title-row,
+.cell-detail .section-title-row,
+.cell-compare h2,
+.cell-detail h2 {
+  flex: 0 0 auto !important;
+}
+
+/* 설명 문구도 위에 고정 */
+.cell-compare .sub-text,
+.cell-detail .sub-text {
+  flex: 0 0 auto !important;
+}
+
+/* 점선 박스는 제목 아래 남은 공간을 같은 비율로 채움 */
+.cell-result .empty-result,
+.cell-history .empty-text,
+.cell-compare .empty-text,
+.cell-detail .empty-text,
+.cell-compare .empty-compare-box,
+.cell-detail .empty-compare-box {
+  flex: 1 1 auto !important;
+
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+
+  margin: 12px 0 0 0 !important;
+  padding: 0 16px !important;
+
+  border: 1px dashed #cfdccf !important;
+  background: #f7faf7 !important;
+  border-radius: 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center !important;
+  line-height: 1.5 !important;
+}
+
+/* 아래쪽 카드들은 높이를 통일해서 점선 박스 비율도 같게 */
+.cell-history,
+.cell-compare,
+.cell-detail {
+  min-height: 260px !important;
+}
+
+/* 가운데/오른쪽 카드 안 panel도 같은 높이로 */
+.cell-compare > .panel,
+.cell-detail > .panel {
+  min-height: 260px !important;
+}
+
+/* ===== 한 화면 안에 들어오게 높이 고정 ===== */
+
+.app-shell {
+  min-height: 100vh !important;
+  padding-bottom: 0 !important;
+  overflow: hidden !important;
+}
+
+.reference-page {
+  width: calc(100vw - 24px) !important;
+  max-width: none !important;
+  height: calc(100vh - 82px) !important;
+  margin: 12px auto 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 320px minmax(0, 1fr) 360px !important;
+  grid-template-rows: minmax(0, 0.53fr) minmax(0, 0.47fr) !important;
+  grid-template-areas:
+    "scan result result"
+    "history compare detail" !important;
+
+  gap: 14px !important;
+  align-items: stretch !important;
+}
+
+/* 각 칸이 화면 밖으로 밀리지 않게 */
+.cell,
+.cell-scan,
+.cell-result,
+.cell-history,
+.cell-compare,
+.cell-detail {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.cell-scan > .panel,
+.cell-result > .panel,
+.cell-compare > .panel,
+.cell-detail > .panel,
+.cell-history.panel {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* ===== 위쪽 줄 압축 ===== */
+
+/* 왼쪽 스캔 카드 */
+.cell-scan .scanner-window {
+  height: 170px !important;
+}
+
+.cell-scan .status-message {
+  min-height: 22px !important;
+  margin-top: 6px !important;
+  font-size: 11px !important;
+}
+
+.cell-scan .button-row {
+  margin-top: 8px !important;
+}
+
+.cell-scan .primary-button,
+.cell-scan .danger-button {
+  padding: 9px 10px !important;
+  font-size: 12px !important;
+}
+
+/* 인식 결과 카드 */
+.cell-result .result-panel {
+  padding: 12px 14px !important;
+}
+
+.cell-result .result-hero {
+  grid-template-columns: 170px minmax(0, 1fr) !important;
+  gap: 18px !important;
+}
+
+.cell-result .result-image-box {
+  width: 170px !important;
+  height: 170px !important;
+}
+
+.cell-result .result-main-info h3 {
+  font-size: 28px !important;
+}
+
+.cell-result .confidence-area {
+  margin-top: 10px !important;
+}
+
+.cell-result .confidence-area strong {
+  font-size: 28px !important;
+}
+
+.cell-result .confidence-track {
+  height: 6px !important;
+  margin-top: 7px !important;
+}
+
+.cell-result .class-name-text {
+  margin-top: 8px !important;
+  font-size: 11px !important;
+}
+
+/* 영양 카드 줄 압축 */
+.cell-result .nutrition-card-grid {
+  margin-top: 10px !important;
+}
+
+.cell-result .nutrition-card {
+  padding: 9px 10px !important;
+}
+
+.cell-result .nutrition-card strong {
+  font-size: 16px !important;
+}
+
+.cell-result .nutrition-card p {
+  font-size: 11px !important;
+}
+
+/* 맞나요 영역 압축 */
+.cell-result .feedback-container {
+  margin-top: 8px !important;
+  padding: 8px !important;
+}
+
+.cell-result .action-box {
+  gap: 6px !important;
+}
+
+.cell-result .btn-yes,
+.cell-result .btn-no {
+  padding: 9px !important;
+  font-size: 12px !important;
+}
+
+/* ===== 아래쪽 줄 압축 ===== */
+
+.cell-history,
+.cell-compare > .panel,
+.cell-detail > .panel {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* 평균 비교 6칸이 아래 줄 안에 들어오게 */
+.cell-compare .vertical-compare-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  margin-top: 8px !important;
+}
+
+.cell-compare .vertical-compare-card {
+  min-height: 0 !important;
+  height: 118px !important;
+  padding: 7px !important;
+}
+
+.cell-compare .vertical-card-header {
+  margin-bottom: 4px !important;
+}
+
+.cell-compare .vertical-card-header strong {
+  font-size: 10px !important;
+}
+
+.cell-compare .vertical-card-header span {
+  font-size: 8px !important;
+}
+
+.cell-compare .vertical-chart {
+  height: 68px !important;
+  gap: 8px !important;
+}
+
+.cell-compare .bar-track {
+  width: 16px !important;
+}
+
+.cell-compare .bar-value {
+  height: 14px !important;
+  font-size: 8px !important;
+  margin-bottom: 3px !important;
+}
+
+.cell-compare .bar-label {
+  font-size: 8px !important;
+  margin-top: 3px !important;
+}
+
+/* 상세 영양성분 표 압축 */
+.cell-detail .nutrition-table {
+  margin-top: 8px !important;
+}
+
+.cell-detail .nutrition-table th,
+.cell-detail .nutrition-table td {
+  padding: 6px 8px !important;
+  font-size: 10px !important;
+}
+
+/* 제목/설명 줄 압축 */
+.cell-compare .sub-text,
+.cell-detail .sub-text {
+  font-size: 10px !important;
+  margin: 5px 0 7px !important;
+}
+
+.panel h2 {
+  font-size: 14px !important;
+}
+
+.section-title-row,
+.panel-title-row {
+  margin-bottom: 8px !important;
+}
+
+/* 스크롤바 자체 방지 */
+html,
+body,
+#root {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* ===== 칸 내부 배율만 조정 ===== */
+
+/* 모든 카드 내부가 칸 높이를 꽉 쓰게 */
+.cell-scan > .panel,
+.cell-result > .panel,
+.cell-compare > .panel,
+.cell-detail > .panel,
+.cell-history.panel {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* ========================= */
+/* 실시간 스캔 카드 내부 비율 */
+/* ========================= */
+
+.cell-scan .scanner-panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.cell-scan .panel-title-row {
+  flex: 0 0 auto !important;
+}
+
+.cell-scan .scanner-window {
+  flex: 1 1 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.cell-scan .status-message {
+  flex: 0 0 auto !important;
+  min-height: 24px !important;
+  margin-top: 8px !important;
+}
+
+.cell-scan .button-row {
+  flex: 0 0 auto !important;
+  margin-top: 10px !important;
+}
+
+/* ========================= */
+/* 인식 결과 카드 내부 비율 */
+/* ========================= */
+
+.cell-result .result-panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* 제목 */
+.cell-result .section-title-row {
+  flex: 0 0 auto !important;
+}
+
+/* 이미지 + 제품명 영역 */
+.cell-result .result-hero {
+  flex: 1.1 1 0 !important;
+  min-height: 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 28% 1fr !important;
+  gap: 24px !important;
+  align-items: center !important;
+}
+
+/* 결과 이미지가 카드 높이에 맞게 커졌다 작아지게 */
+.cell-result .result-image-box {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 220px !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+/* 신뢰도 바가 너무 길게 퍼지지 않게 */
+.cell-result .confidence-track {
+  width: 100% !important;
+  max-width: 620px !important;
+}
+
+/* 영양 카드 영역 */
+.cell-result .nutrition-card-grid {
+  flex: 0.75 1 0 !important;
+  min-height: 0 !important;
+  margin-top: 10px !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  align-items: stretch !important;
+}
+
+.cell-result .nutrition-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+/* 맞나요 영역 */
+.cell-result .feedback-container {
+  flex: 0 0 auto !important;
+  margin-top: 10px !important;
+}
+
+/* ========================= */
+/* 아래 3칸 내부 비율 */
+/* ========================= */
+
+.cell-history,
+.cell-compare > .panel,
+.cell-detail > .panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* 제목은 위에 고정 */
+.cell-history .section-title-row,
+.cell-compare .section-title-row,
+.cell-detail .section-title-row,
+.cell-compare h2,
+.cell-detail h2 {
+  flex: 0 0 auto !important;
+}
+
+/* 설명문은 제목 아래 고정 */
+.cell-compare .sub-text,
+.cell-detail .sub-text {
+  flex: 0 0 auto !important;
+}
+
+/* 빈 상태 점선 박스는 남은 영역을 같은 비율로 채움 */
+.cell-history .empty-text,
+.cell-compare .empty-text,
+.cell-detail .empty-text,
+.cell-compare .empty-compare-box,
+.cell-detail .empty-compare-box {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+
+  margin: 10px 0 0 0 !important;
+  padding: 0 16px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* 평균 비교 결과가 있을 때: 6개 카드가 아래 칸 안에서 균등 분배 */
+.cell-compare .vertical-compare-grid {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-rows: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+}
+
+.cell-compare .vertical-compare-card {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* 상세 영양성분 표가 오른쪽 칸 안에 맞게 */
+.cell-detail .nutrition-table {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+}
+
+.cell-detail .nutrition-table th,
+.cell-detail .nutrition-table td {
+  padding: 6px 8px !important;
+}
+
+/* ===== 헤더 크기 키우고 로고 중앙 정렬 ===== */
+
+.top-header {
+  height: 78px !important;
+  padding: 0 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.brand-area {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+}
+
+.brand-icon {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 14px !important;
+  font-size: 22px !important;
+}
+
+.brand-area h1 {
+  font-size: 22px !important;
+  line-height: 1.1 !important;
+}
+
+.brand-area p {
+  font-size: 12px !important;
+  margin-top: 4px !important;
+}
+
+/* ===== 스크롤 차단 X, 화면에 맞게 크기 조정 ===== */
+
+/* 스크롤을 강제로 막지 않음 */
+html,
+body,
+#root {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.app-shell {
+  min-height: 100vh !important;
+  overflow: visible !important;
+  padding-bottom: 12px !important;
+}
+
+/* 헤더가 커진 만큼 본문 높이를 화면 안에 맞춤 */
+.reference-page {
+  width: calc(100vw - 24px) !important;
+  max-width: none !important;
+  margin: 10px auto 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 320px minmax(0, 1fr) 360px !important;
+  grid-template-areas:
+    "scan result result"
+    "history compare detail" !important;
+
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+
+/* 카드 기본 여백 줄이기 */
+.panel {
+  padding: 12px !important;
+  border-radius: 15px !important;
+}
+
+/* 헤더 크기 유지하되 너무 크지 않게 */
+.top-header {
+  height: 72px !important;
+}
+
+/* 왼쪽 스캔 카드 압축 */
+.cell-scan .scanner-window {
+  height: 165px !important;
+}
+
+.cell-scan .status-message {
+  min-height: 22px !important;
+  margin-top: 6px !important;
+  font-size: 11px !important;
+}
+
+.cell-scan .button-row {
+  margin-top: 8px !important;
+}
+
+.cell-scan .primary-button,
+.cell-scan .danger-button {
+  padding: 9px 10px !important;
+  font-size: 12px !important;
+}
+
+/* 인식 결과 카드 압축 */
+.cell-result .result-hero {
+  grid-template-columns: 165px minmax(0, 1fr) !important;
+  gap: 18px !important;
+}
+
+.cell-result .result-image-box {
+  width: 165px !important;
+  height: 165px !important;
+}
+
+.cell-result .result-main-info h3 {
+  font-size: 27px !important;
+}
+
+.cell-result .confidence-area {
+  margin-top: 8px !important;
+}
+
+.cell-result .confidence-area strong {
+  font-size: 27px !important;
+}
+
+.cell-result .confidence-track {
+  height: 6px !important;
+  margin-top: 6px !important;
+}
+
+.cell-result .class-name-text {
+  margin-top: 7px !important;
+  font-size: 11px !important;
+}
+
+/* 영양 카드 줄 압축 */
+.cell-result .nutrition-card-grid {
+  margin-top: 9px !important;
+}
+
+.cell-result .nutrition-card {
+  padding: 8px 10px !important;
+}
+
+.cell-result .nutrition-card strong {
+  font-size: 16px !important;
+}
+
+.cell-result .nutrition-card p {
+  font-size: 11px !important;
+}
+
+/* 이 라면이 맞나요 영역 압축 */
+.cell-result .feedback-container {
+  margin-top: 8px !important;
+  padding: 8px !important;
+}
+
+.cell-result .action-box {
+  gap: 6px !important;
+}
+
+.cell-result .btn-yes,
+.cell-result .btn-no {
+  padding: 8px !important;
+  font-size: 12px !important;
+}
+
+/* 아래쪽 평균 비교 카드 압축 */
+.cell-compare .vertical-compare-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  margin-top: 7px !important;
+}
+
+.cell-compare .vertical-compare-card {
+  min-height: 0 !important;
+  height: 110px !important;
+  padding: 7px !important;
+}
+
+.cell-compare .vertical-card-header {
+  margin-bottom: 3px !important;
+}
+
+.cell-compare .vertical-card-header strong {
+  font-size: 10px !important;
+}
+
+.cell-compare .vertical-card-header span {
+  font-size: 8px !important;
+}
+
+.cell-compare .vertical-chart {
+  height: 62px !important;
+  gap: 8px !important;
+}
+
+.cell-compare .bar-track {
+  width: 16px !important;
+}
+
+.cell-compare .bar-value {
+  height: 13px !important;
+  font-size: 8px !important;
+  margin-bottom: 3px !important;
+}
+
+.cell-compare .bar-label {
+  font-size: 8px !important;
+  margin-top: 3px !important;
+}
+
+/* 상세 영양성분 표 압축 */
+.cell-detail .nutrition-table {
+  margin-top: 7px !important;
+}
+
+.cell-detail .nutrition-table th,
+.cell-detail .nutrition-table td {
+  padding: 5px 8px !important;
+  font-size: 10px !important;
+}
+
+/* 제목/설명 압축 */
+.panel h2 {
+  font-size: 14px !important;
+}
+
+.section-title-row,
+.panel-title-row {
+  margin-bottom: 7px !important;
+}
+
+.cell-compare .sub-text,
+.cell-detail .sub-text {
+  font-size: 10px !important;
+  margin: 4px 0 6px !important;
+}
+
+/* ===== 평균 비교 그래프 크기 키우기 ===== */
+
+.cell-compare .vertical-compare-grid {
+  gap: 10px !important;
+  margin-top: 10px !important;
+}
+
+.cell-compare .vertical-compare-card {
+  height: 135px !important;
+  padding: 10px 12px !important;
+}
+
+.cell-compare .vertical-card-header {
+  margin-bottom: 6px !important;
+}
+
+.cell-compare .vertical-card-header strong {
+  font-size: 12px !important;
+}
+
+.cell-compare .vertical-card-header span {
+  font-size: 9px !important;
+}
+
+.cell-compare .vertical-chart {
+  height: 82px !important;
+  gap: 12px !important;
+}
+
+.cell-compare .bar-track {
+  width: 22px !important;
+}
+
+.cell-compare .bar-value {
+  height: 16px !important;
+  font-size: 9px !important;
+  margin-bottom: 4px !important;
+}
+
+.cell-compare .bar-label {
+  font-size: 10px !important;
+  margin-top: 4px !important;
+}
+
+/* ===== 하단 세로 비율 수정: 비교칸 넓게, 상세칸 좁게 ===== */
+
+/* 전체 3칸 비율 조정 */
+.reference-page {
+  grid-template-columns: 300px minmax(520px, 1fr) 300px !important;
+}
+
+/* 아래쪽 비교/상세 카드 높이 */
+.cell-compare > .panel,
+.cell-detail > .panel,
+.cell-history.panel {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* 평균 비교 카드 내부를 3 x 2로 균등하게 */
+.cell-compare .vertical-compare-grid {
+  height: calc(100% - 48px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+
+/* 그래프 카드가 세로로 늘어지지 않게 */
+.cell-compare .vertical-compare-card {
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 9px 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* 그래프 제목 영역 */
+.cell-compare .vertical-card-header {
+  flex: 0 0 auto !important;
+  margin-bottom: 4px !important;
+}
+
+/* 막대 그래프 영역 */
+.cell-compare .vertical-chart {
+  flex: 1 1 auto !important;
+  height: auto !important;
+  min-height: 56px !important;
+  gap: 10px !important;
+}
+
+/* 막대 크기 */
+.cell-compare .bar-track {
+  width: 20px !important;
+}
+
+.cell-compare .bar-value {
+  height: 14px !important;
+  font-size: 8px !important;
+  margin-bottom: 3px !important;
+}
+
+.cell-compare .bar-label {
+  font-size: 9px !important;
+  margin-top: 3px !important;
+}
+
+/* 오른쪽 상세 표가 너무 크게 보이지 않게 */
+.cell-detail .nutrition-table th,
+.cell-detail .nutrition-table td {
+  padding: 6px 8px !important;
+  font-size: 10px !important;
+}
+
+/* 화면이 좁을 때는 오른쪽 상세칸을 줄이고 비교칸 확보 */
+@media (max-width: 1200px) {
+  .reference-page {
+    grid-template-columns: 300px minmax(460px, 1fr) 260px !important;
+  }
+}
+
+/* ===== 요구 구조 반영 ===== */
+/* 위: 스캔 / 인식결과 / 상세정보 / 맞나요 */
+/* 아래: 최근기록 / 평균비교 넓게 */
+
+.reference-page {
+  width: calc(100vw - 24px) !important;
+  max-width: none !important;
+  margin: 10px auto 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 300px minmax(520px, 1fr) 300px 280px !important;
+  grid-template-areas:
+    "scan result detail feedback"
+    "history compare compare compare" !important;
+
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+
+/* 칸 위치 */
+.cell-scan {
+  grid-area: scan !important;
+}
+
+.cell-result {
+  grid-area: result !important;
+}
+
+.cell-detail {
+  grid-area: detail !important;
+}
+
+.cell-feedback {
+  grid-area: feedback !important;
+}
+
+.cell-history {
+  grid-area: history !important;
+}
+
+.cell-compare {
+  grid-area: compare !important;
+}
+
+/* 공통 */
+.cell {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.cell-scan > .panel,
+.cell-result > .panel,
+.cell-detail > .panel,
+.cell-feedback > .panel,
+.cell-compare > .panel,
+.cell-history.panel {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 인식 결과 카드: 요약 카드 제거 후 비율 정리 */
+.cell-result .result-panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.cell-result .result-hero {
+  flex: 1 !important;
+  display: grid !important;
+  grid-template-columns: 220px minmax(0, 1fr) !important;
+  gap: 22px !important;
+  align-items: center !important;
+}
+
+.cell-result .result-image-box {
+  width: 220px !important;
+  height: 220px !important;
+}
+
+.cell-result .confidence-track {
+  max-width: 100% !important;
+}
+
+/* 상세 영양성분을 위쪽 칸에 맞춤 */
+.cell-detail > .panel {
+  overflow: hidden !important;
+}
+
+.cell-detail .nutrition-table {
+  margin-top: 10px !important;
+}
+
+.cell-detail .nutrition-table th,
+.cell-detail .nutrition-table td {
+  padding: 7px 8px !important;
+  font-size: 11px !important;
+}
+
+/* 오른쪽 끝 피드백 카드 */
+.feedback-panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.feedback-card-body,
+.feedback-empty {
+  flex: 1 !important;
+  width: 100% !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center !important;
+  gap: 14px !important;
+}
+
+.feedback-card-body p {
+  color: #475467;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.feedback-card-body strong {
+  color: #102116;
+  font-size: 18px;
+}
+
+.feedback-button-column {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
-.action-box {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
+.feedback-button-column .btn-yes,
+.feedback-button-column .btn-no {
   width: 100%;
 }
 
-.btn-yes, .btn-no, .btn-apply {
-  flex: 1;
-  padding: 12px;
-  font-size: 15px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-}
-.btn-yes { background: #22c55e; color: white; }
-.btn-no { background: #ef4444; color: white; }
-.btn-apply { background: #3b82f6; color: white; flex-grow: 1; }
-
-button:disabled {
-  background: #94a3b8;
-  cursor: not-allowed;
-  opacity: 0.7;
+/* 아래 평균 비교 카드가 오른쪽 끝까지 차지 */
+.cell-compare > .panel {
+  display: flex !important;
+  flex-direction: column !important;
 }
 
-.ramen-select {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  width: 150px;
+.cell-compare .vertical-compare-grid {
+  flex: 1 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
 }
 
-.success-msg {
-  color: #059669;
-  font-weight: bold;
-  text-align: center;
-  padding: 10px;
+.cell-compare .vertical-compare-card {
+  height: auto !important;
+  min-height: 0 !important;
 }
 
-.button-row-full {
-  display: flex;
-  width: 100%;
-  max-width: 300px; /* 버튼이 너무 커지지 않게 최대 너비 설정 */
-  gap: 12px;
-  justify-content: center; /* 버튼들을 가로 중앙으로 정렬 */
+/* 기존 결과 안 영양 카드 혹시 남으면 숨김 */
+.cell-result .nutrition-card-grid {
+  display: none !important;
+}
+
+/* 기존 결과 안 맞나요 영역 혹시 남으면 숨김 */
+.cell-result .feedback-container {
+  display: none !important;
+}
+
+/* ===== 피드백 카드 디자인 정리 ===== */
+
+.feedback-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 16px !important;
+}
+
+.feedback-panel h2 {
+  margin-bottom: 14px !important;
+}
+
+/* 피드백 카드 안쪽 영역 */
+.feedback-card-body {
+  flex: 1 !important;
+  width: 100% !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+
+  gap: 14px !important;
+}
+
+/* 셀렉트 박스 */
+.feedback-panel .ramen-select {
+  width: 100% !important;
+  height: 44px !important;
+  padding: 0 14px !important;
+
+  border: 1px solid #cfdccf !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+
+  color: #102116 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* 변경 적용 버튼이 세로로 늘어나지 않게 */
+.feedback-panel .btn-apply {
+  flex: 0 0 auto !important;
+
+  width: 100% !important;
+  height: 44px !important;
+  padding: 0 !important;
+
+  border: none !important;
+  border-radius: 12px !important;
+
+  background: #168243 !important;
+  color: #ffffff !important;
+
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+/* 네/아니오 버튼도 카드 안에서 자연스럽게 */
+.feedback-button-column {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.feedback-button-column .btn-yes,
+.feedback-button-column .btn-no {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  height: 42px !important;
+  padding: 0 !important;
+  border-radius: 12px !important;
+}
+
+/* 선택 안내 문구 */
+.feedback-card-body p {
+  margin: 0 !important;
+  text-align: center !important;
+  color: #475467 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.feedback-card-body strong {
+  display: inline-block !important;
+  margin-top: 4px !important;
+  color: #102116 !important;
+  font-size: 18px !important;
+}
+
+/* ===== 인식 결과 사진만 크게 ===== */
+
+.cell-result .result-hero {
+  grid-template-columns: 400px minmax(0, 1fr) !important;
+  gap: 28px !important;
+}
+
+.cell-result .result-image-box {
+  width: 400px !important;
+  height: 400px !important;
+  border-radius: 18px !important;
+}
+
+.cell-result .result-image-box img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }

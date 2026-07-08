@@ -1,5 +1,5 @@
 import io
-import pymysql  # 오라클 연결 라이브러리
+import pymysql  
 from fastapi import FastAPI, UploadFile, File
 from ultralytics import YOLO
 from PIL import Image
@@ -22,7 +22,7 @@ class RamenFeedback(BaseModel):
 app = FastAPI()
 
 # 1. YOLOv8 모델 로드
-model = YOLO("yolo11n_ver2.pt")
+model = YOLO("models/yolo11n_ver2.pt")
 
 engine = config.get_engine()
 
