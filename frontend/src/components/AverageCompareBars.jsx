@@ -82,7 +82,7 @@ function AverageCompareBars({ result }) {
     <section className="panel">
       <h2>📊 전체 라면 평균 비교</h2>
       <p className="sub-text">
-        Oracle DB에 저장된 전체 라면 평균값과 현재 인식된 라면을 비교합니다.
+        DB에 저장된 전체 라면 평균값과 현재 인식된 라면을 비교합니다.
       </p>
 
       <div className="vertical-compare-grid">

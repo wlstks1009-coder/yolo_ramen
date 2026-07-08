@@ -353,14 +353,17 @@ button {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin-top: auto;
+  margin-top: 20px;
+  margin-bottom: 24px;
 }
 
 .nutrition-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 18px;
-  padding: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .nutrition-icon {
@@ -630,4 +633,64 @@ button {
   .bar-track {
     width: 22px;
   }
+}
+
+.feedback-container {
+  margin-top: 24px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.action-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+}
+
+.btn-yes, .btn-no, .btn-apply {
+  flex: 1;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-yes { background: #22c55e; color: white; }
+.btn-no { background: #ef4444; color: white; }
+.btn-apply { background: #3b82f6; color: white; flex-grow: 1; }
+
+button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.ramen-select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  width: 150px;
+}
+
+.success-msg {
+  color: #059669;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+.button-row-full {
+  display: flex;
+  width: 100%;
+  max-width: 300px; /* 버튼이 너무 커지지 않게 최대 너비 설정 */
+  gap: 12px;
+  justify-content: center; /* 버튼들을 가로 중앙으로 정렬 */
 }
