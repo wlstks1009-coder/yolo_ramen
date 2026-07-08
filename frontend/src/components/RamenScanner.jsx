@@ -5,6 +5,7 @@ import ScannerPanel from "./ScannerPanel.jsx";
 import ResultPanel from "./ResultPanel.jsx";
 import NutritionTable from "./NutritionTable.jsx";
 import AverageCompareBars from "./AverageCompareBars.jsx";
+import FeedbackPanel from "./FeedbackPanel.jsx";
 
 function RamenScanner() {
   const videoRef = useRef(null);
@@ -13,16 +14,17 @@ function RamenScanner() {
   const processingRef = useRef(false);
   const streamRef = useRef(null);
 
+  const lastClassRef = useRef(null);
+  const sameClassCountRef = useRef(0);
+  const REQUIRED_SAME_CLASS_COUNT = 3;
+
   const [isScanning, setIsScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState("idle");
   const [statusMessage, setStatusMessage] = useState("스캔 시작 버튼을 눌러주세요.");
   const [result, setResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
-
-  const lastClassRef = useRef(null);
-  const sameClassCountRef = useRef(0);
-  const REQUIRED_SAME_CLASS_COUNT = 3;
+  const [historyList, setHistoryList] = useState([]);
 
   async function startCamera() {
     try {
@@ -73,21 +75,32 @@ function RamenScanner() {
     sameClassCountRef.current = 0;
 
     setPreviewImage((prev) => {
-      if (prev) {
-        URL.revokeObjectURL(prev);
-      }
+      if (prev) URL.revokeObjectURL(prev);
       return null;
     });
   }
 
   function setCapturedPreview(blob) {
     setPreviewImage((prev) => {
-      if (prev) {
-        URL.revokeObjectURL(prev);
-      }
-
+      if (prev) URL.revokeObjectURL(prev);
       return URL.createObjectURL(blob);
     });
+  }
+
+  function addHistory(data) {
+    const now = new Date();
+
+    const item = {
+      id: `${data.class_name}-${now.getTime()}`,
+      name: data.info?.name || data.class_name,
+      confidence: data.confidence || "-",
+      time: now.toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    setHistoryList((prev) => [item, ...prev].slice(0, 5));
   }
 
   function captureFrameToBlob() {
@@ -100,12 +113,7 @@ function RamenScanner() {
         return;
       }
 
-      // 비디오가 실제로 준비됐는지 확인
-      if (
-        video.readyState < 2 ||
-        video.videoWidth === 0 ||
-        video.videoHeight === 0
-      ) {
+      if (video.readyState < 2 || video.videoWidth === 0 || video.videoHeight === 0) {
         reject(new Error("카메라 영상이 아직 준비되지 않았습니다."));
         return;
       }
@@ -117,7 +125,6 @@ function RamenScanner() {
       canvas.height = height;
 
       const context = canvas.getContext("2d");
-
       if (!context) {
         reject(new Error("캔버스 컨텍스트를 가져오지 못했습니다."));
         return;
@@ -141,9 +148,7 @@ function RamenScanner() {
   }
 
   async function scanOnce() {
-    if (processingRef.current) {
-      return;
-    }
+    if (processingRef.current) return;
 
     processingRef.current = true;
 
@@ -157,9 +162,7 @@ function RamenScanner() {
 
         if (confidenceNumber < 70) {
           setScanStatus("scanning");
-          setStatusMessage(
-            `${detectedClass} 감지됨, 하지만 신뢰도 ${data.confidence}로 낮아 계속 스캔합니다.`
-          );
+          setStatusMessage(`${detectedClass} 감지됨, 하지만 신뢰도 ${data.confidence}로 낮아 계속 스캔합니다.`);
           return;
         }
 
@@ -171,17 +174,14 @@ function RamenScanner() {
         }
 
         setScanStatus("scanning");
-        setStatusMessage(
-          `${detectedClass} 감지 중... (${sameClassCountRef.current}/${REQUIRED_SAME_CLASS_COUNT}) / 신뢰도 ${data.confidence}`
-        );
+        setStatusMessage(`${detectedClass} 감지 중... (${sameClassCountRef.current}/${REQUIRED_SAME_CLASS_COUNT}) / 신뢰도 ${data.confidence}`);
 
-        if (sameClassCountRef.current < REQUIRED_SAME_CLASS_COUNT) {
-          return;
-        }
+        if (sameClassCountRef.current < REQUIRED_SAME_CLASS_COUNT) return;
 
         stopScan();
         setCapturedPreview(blob);
         setResult(data);
+        addHistory(data);
         setErrorMessage("");
         setScanStatus("success");
         setStatusMessage("라면 인식 및 DB 조회에 성공했습니다.");
@@ -207,23 +207,17 @@ function RamenScanner() {
 
     setIsScanning(true);
     setScanStatus("scanning");
-    setStatusMessage("라면 봉지를 카메라 중앙에 맞춰주세요. 잠시 후 인식을 시작합니다...");
+    setStatusMessage("라면 봉지를 카메라 중앙에 맞춰주세요.");
 
     setTimeout(() => {
       scanOnce();
-
-      intervalRef.current = setInterval(() => {
-        scanOnce();
-      }, 700);
+      intervalRef.current = setInterval(scanOnce, 700);
     }, 500);
   }
 
   function restartScan() {
     resetResult();
-
-    setTimeout(() => {
-      startScan();
-    }, 200);
+    setTimeout(startScan, 200);
   }
 
   useEffect(() => {
@@ -234,9 +228,7 @@ function RamenScanner() {
       stopCamera();
 
       setPreviewImage((prev) => {
-        if (prev) {
-          URL.revokeObjectURL(prev);
-        }
+        if (prev) URL.revokeObjectURL(prev);
         return null;
       });
     };
@@ -246,29 +238,69 @@ function RamenScanner() {
     <div className="app-shell">
       <Header />
 
-      <main className="top-layout">
-        <ResultPanel result={result} setResult={setResult} errorMessage={errorMessage} />
+      <main className="reference-page">
+        <div className="cell cell-scan">
+          <ScannerPanel
+            videoRef={videoRef}
+            canvasRef={canvasRef}
+            previewImage={previewImage}
+            status={scanStatus}
+            statusMessage={statusMessage}
+            isScanning={isScanning}
+            onStart={startScan}
+            onStop={stopScan}
+            onRestart={restartScan}
+          />
+        </div>
 
-        <ScannerPanel
-          videoRef={videoRef}
-          canvasRef={canvasRef}
-          previewImage={previewImage}
-          status={scanStatus}
-          statusMessage={statusMessage}
-          isScanning={isScanning}
-          onStart={startScan}
-          onStop={stopScan}
-          onRestart={restartScan}
-        />
+        <div className="cell cell-result">
+          <ResultPanel
+            result={result}
+            errorMessage={errorMessage}
+            previewImage={previewImage}
+          />
+        </div>
 
-        <NutritionTable result={result} />
+        <div className="cell cell-detail">
+          <NutritionTable result={result} />
+        </div>
+
+        <div className="cell cell-feedback">
+          <FeedbackPanel result={result} setResult={setResult} />
+        </div>
+
+        <section className="panel cell cell-history">
+          <div className="section-title-row">
+            <h2>최근 인식 기록</h2>
+            <span>{historyList.length}개</span>
+          </div>
+
+          {historyList.length === 0 ? (
+            <p className="empty-text compact">아직 인식 기록이 없습니다.</p>
+          ) : (
+            <div className="history-list">
+              {historyList.map((item) => (
+                <div className="history-item" key={item.id}>
+                  <div className="history-thumb">🍜</div>
+
+                  <div className="history-info">
+                    <strong>{item.name}</strong>
+                    <span>{item.time}</span>
+                  </div>
+
+                  <span className="history-confidence">{item.confidence}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <div className="cell cell-compare">
+          <AverageCompareBars result={result} />
+        </div>
       </main>
-
-      <section className="bottom-layout">
-        <AverageCompareBars result={result} />
-      </section>
     </div>
-  );
+);
 }
 
 export default RamenScanner;
