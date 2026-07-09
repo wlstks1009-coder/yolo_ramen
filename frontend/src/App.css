@@ -1,3 +1,5 @@
+/* ================= 기본 설정 ================= */
+
 * {
   box-sizing: border-box;
 }
@@ -13,6 +15,7 @@ body,
 
 body {
   overflow-x: hidden;
+  overflow-y: auto;
   font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
   background: #f4f8f3;
   color: #102116;
@@ -27,75 +30,118 @@ button {
   cursor: pointer;
 }
 
+img,
+video,
+canvas {
+  display: block;
+}
+
+/* ================= 유지보수용 크기 변수 ================= */
+
+:root {
+  /* 전체 화면 */
+  --page-width: 98vw;
+  --page-margin-top: 1.2vh;
+  --page-gap: clamp(0.75rem, 1vw, 1rem);
+  --header-height: clamp(4.25rem, 8vh, 4.75rem);
+
+  /* 전체 칸 비율: 스캔 / 결과 / 상세 / 피드백 */
+  --layout-columns: 1fr 3.2fr 1.1fr 1fr;
+
+  /* 위쪽 줄 / 아래쪽 줄 */
+  --layout-rows: minmax(0, 1fr) minmax(0, 0.95fr);
+
+  /* 인식 결과 안 사진 비율 */
+  --result-image-column: 32%;
+
+  /* 공통 스타일 크기 */
+  --panel-padding: clamp(0.75rem, 1vw, 0.9rem);
+  --panel-radius: clamp(0.9rem, 1.1vw, 1rem);
+  --inner-radius: clamp(0.8rem, 1vw, 0.95rem);
+
+  --title-size: clamp(0.9rem, 1vw, 0.95rem);
+  --body-size: clamp(0.72rem, 0.85vw, 0.8rem);
+  --small-size: clamp(0.62rem, 0.75vw, 0.72rem);
+
+  --button-height: clamp(2.4rem, 4.5vh, 2.8rem);
+}
+
+/* ================= 전체 앱 / 헤더 ================= */
+
 .app-shell {
   width: 100%;
   min-height: 100vh;
-  padding-bottom: 36px;
+  padding-bottom: clamp(0.5rem, 1vh, 0.8rem);
 }
 
-/* ================= Header ================= */
-
 .top-header {
-  height: 58px;
-  padding: 0 28px;
+  height: var(--header-height);
+  padding: 0 clamp(1rem, 2vw, 1.75rem);
   background: #ffffff;
   border-bottom: 1px solid #dfe8df;
+
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .brand-area {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: clamp(0.6rem, 1vw, 0.8rem);
 }
 
 .brand-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
+  width: clamp(2.4rem, 3.2vw, 2.75rem);
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
   background: #e8f5ec;
   border: 1px solid #cfe8d6;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
+
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
 }
 
 .brand-area h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: clamp(1.25rem, 2vw, 1.45rem);
   line-height: 1.1;
   color: #168243;
   letter-spacing: -0.04em;
 }
 
 .brand-area p {
-  margin: 3px 0 0;
-  font-size: 11px;
+  margin: 0.25rem 0 0;
+  font-size: clamp(0.68rem, 0.85vw, 0.75rem);
   color: #667085;
 }
 
-/* ================= Page structure ================= */
+/* ================= 페이지 구조 ================= */
 
 .reference-page {
-  width: calc(100vw - 40px) !important;
-  max-width: none !important;
-  margin: 18px auto 0 !important;
+  width: var(--page-width);
+  max-width: var(--page-width);
+  min-height: calc(100svh - var(--header-height) - 2.2vh);
+  margin: var(--page-margin-top) auto 0;
 
-  display: grid !important;
-  grid-template-columns: 330px minmax(0, 1fr) 360px !important;
+  display: grid;
+  grid-template-columns: var(--layout-columns);
+  grid-template-rows: var(--layout-rows);
   grid-template-areas:
-    "scan result result"
-    "history compare detail" !important;
+    "scan result detail feedback"
+    "history compare compare compare";
 
-  gap: 16px !important;
-  align-items: stretch !important;
+  gap: var(--page-gap);
+  align-items: stretch;
 }
 
 .cell {
   min-width: 0;
+  min-height: 0;
 }
 
 .cell-scan {
@@ -108,8 +154,20 @@ button {
   display: flex;
 }
 
+.cell-detail {
+  grid-area: detail;
+  display: flex;
+}
+
+.cell-feedback {
+  grid-area: feedback;
+  display: flex;
+}
+
 .cell-history {
   grid-area: history;
+  display: flex;
+  flex-direction: column;
 }
 
 .cell-compare {
@@ -117,33 +175,30 @@ button {
   display: flex;
 }
 
-.cell-detail {
-  grid-area: detail;
-  display: flex;
-}
-
 .cell-scan > .panel,
 .cell-result > .panel,
-.cell-compare > .panel,
 .cell-detail > .panel,
+.cell-feedback > .panel,
+.cell-compare > .panel,
 .cell-history.panel {
   width: 100%;
   height: 100%;
 }
 
-/* ================= Common card ================= */
+/* ================= 공통 카드 ================= */
 
 .panel {
   background: #ffffff;
   border: 1px solid #dfe8df;
-  border-radius: 16px;
-  padding: 14px;
+  border-radius: var(--panel-radius);
+  padding: var(--panel-padding);
   box-shadow: 0 8px 22px rgba(33, 71, 45, 0.055);
+  overflow: hidden;
 }
 
 .panel h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--title-size);
   letter-spacing: -0.03em;
   color: #102116;
 }
@@ -157,20 +212,20 @@ button {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: clamp(0.5rem, 0.8vw, 0.75rem);
+  margin-bottom: clamp(0.45rem, 0.8vh, 0.75rem);
 }
 
 .section-title-row span {
   color: #168243;
-  font-size: 12px;
+  font-size: var(--small-size);
   font-weight: 800;
 }
 
 .panel-title-row p {
-  margin-top: 5px;
+  margin-top: 0.35rem;
   color: #667085;
-  font-size: 12px;
+  font-size: var(--body-size);
   line-height: 1.45;
 }
 
@@ -179,33 +234,33 @@ button {
   background: #f7faf7;
   border: 1px dashed #cfdccf;
   border-radius: 13px;
-  padding: 16px;
+  padding: clamp(0.8rem, 1.2vw, 1rem);
   text-align: center;
   line-height: 1.5;
-  font-size: 12px;
+  font-size: var(--body-size);
 }
 
 .empty-text.compact {
-  padding: 14px;
+  padding: clamp(0.7rem, 1vw, 0.9rem);
 }
 
 .sub-text {
-  margin: 7px 0 10px !important;
+  margin: clamp(0.25rem, 0.6vh, 0.45rem) 0 clamp(0.45rem, 0.8vh, 0.7rem);
   color: #667085;
-  font-size: 11px;
+  font-size: var(--small-size);
   line-height: 1.45;
 }
 
-/* ================= Status ================= */
+/* ================= 상태 표시 ================= */
 
 .status-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  padding: 6px 10px;
+  padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: var(--small-size);
   font-weight: 800;
 }
 
@@ -232,20 +287,25 @@ button {
 
 .success-chip {
   background: #e8f5ec;
-  color: #168243 !important;
-  padding: 6px 10px;
+  color: #168243;
+  padding: 0.35rem 0.65rem;
   border-radius: 999px;
 }
 
-/* ================= Scanner ================= */
+/* ================= 스캔 영역 ================= */
 
 .scanner-panel {
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .scanner-window {
+  flex: 1 1 auto;
   width: 100%;
-  height: 210px;
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+
   background: #f7faf7;
   border: 1px solid #dfe8df;
   border-radius: 14px;
@@ -257,7 +317,6 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .video-layer {
@@ -282,17 +341,17 @@ button {
 }
 
 .status-message {
-  min-height: 32px;
-  margin-top: 10px !important;
+  min-height: clamp(1.4rem, 3vh, 2rem);
+  margin-top: clamp(0.4rem, 0.8vh, 0.65rem);
   color: #667085;
-  font-size: 12px;
+  font-size: var(--body-size);
   line-height: 1.45;
 }
 
 .button-row {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  gap: clamp(0.5rem, 0.8vw, 0.7rem);
+  margin-top: clamp(0.5rem, 0.9vh, 0.7rem);
 }
 
 .primary-button,
@@ -300,8 +359,9 @@ button {
   flex: 1;
   border: none;
   border-radius: 11px;
-  padding: 11px 12px;
-  font-size: 13px;
+  min-height: var(--button-height);
+  padding: 0 clamp(0.7rem, 1vw, 0.9rem);
+  font-size: clamp(0.75rem, 0.9vw, 0.85rem);
   font-weight: 800;
 }
 
@@ -315,39 +375,41 @@ button {
   color: #ffffff;
 }
 
-/* ================= History ================= */
-
-.cell-history {
-  display: flex;
-  flex-direction: column;
-}
+/* ================= 최근 인식 기록 ================= */
 
 .history-list {
+  flex: 1;
+  min-height: 0;
+
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: clamp(0.45rem, 0.8vh, 0.6rem);
+
+  overflow-y: auto;
 }
 
 .history-item {
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr) auto;
+  grid-template-columns: clamp(2rem, 2.8vw, 2.4rem) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 9px;
-  padding: 8px;
+  gap: clamp(0.45rem, 0.8vw, 0.6rem);
+  padding: clamp(0.45rem, 0.8vw, 0.55rem);
   border-radius: 14px;
   background: #f7faf7;
   border: 1px solid #e4eee4;
 }
 
 .history-thumb {
-  width: 38px;
-  height: 38px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 12px;
   background: #e8f5ec;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
 }
 
 .history-info {
@@ -357,7 +419,7 @@ button {
 .history-info strong {
   display: block;
   color: #102116;
-  font-size: 12px;
+  font-size: var(--body-size);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -366,51 +428,57 @@ button {
 .history-info span {
   display: block;
   color: #667085;
-  font-size: 11px;
-  margin-top: 2px;
+  font-size: var(--small-size);
+  margin-top: 0.15rem;
 }
 
 .history-confidence {
   background: #e8f5ec;
   color: #168243;
   border-radius: 999px;
-  padding: 5px 7px;
-  font-size: 11px;
+  padding: 0.3rem 0.45rem;
+  font-size: var(--small-size);
   font-weight: 800;
 }
 
-/* 빈 기록 문구가 카드 안을 채우게 */
 .cell-history .empty-text {
   flex: 1;
   width: 100%;
   min-height: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   margin: 0;
 }
 
-/* ================= Result ================= */
+/* ================= 인식 결과 ================= */
 
 .result-panel {
   min-height: 0;
-  overflow: visible;
+  display: flex;
+  flex-direction: column;
 }
 
 .result-hero {
+  flex: 1;
+  min-height: 0;
+
   display: grid;
-  grid-template-columns: 210px minmax(0, 1fr);
-  gap: 20px;
+  grid-template-columns: var(--result-image-column) minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 1.75rem);
   align-items: center;
 }
 
 .result-image-box {
-  width: 210px;
-  height: 210px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 14px;
   border: 1px solid #dfe8df;
   background: #f7faf7;
   overflow: hidden;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -423,7 +491,7 @@ button {
 }
 
 .result-image-box span {
-  font-size: 48px;
+  font-size: clamp(2.2rem, 4vw, 3rem);
 }
 
 .result-main-info {
@@ -432,49 +500,50 @@ button {
 
 .result-label {
   color: #168243;
-  font-size: 12px;
+  font-size: var(--body-size);
   font-weight: 800;
-  margin-bottom: 7px !important;
+  margin-bottom: 0.45rem;
 }
 
 .result-main-info h3 {
   margin: 0;
-  font-size: 31px;
+  font-size: clamp(1.7rem, 2.4vw, 3rem);
   line-height: 1.12;
   letter-spacing: -0.05em;
   color: #111827;
+  word-break: keep-all;
 }
 
 .brand-text {
   color: #667085;
-  margin-top: 7px !important;
-  font-size: 12px;
+  margin-top: 0.45rem;
+  font-size: var(--body-size);
 }
 
 .confidence-area {
-  margin-top: 14px;
+  margin-top: clamp(0.7rem, 1.2vh, 0.9rem);
 }
 
 .confidence-area span {
   display: block;
   color: #667085;
-  font-size: 12px;
-  margin-bottom: 4px;
+  font-size: var(--body-size);
+  margin-bottom: 0.25rem;
 }
 
 .confidence-area strong {
   display: block;
   color: #168243;
-  font-size: 31px;
+  font-size: clamp(1.6rem, 2.2vw, 2.6rem);
   line-height: 1;
 }
 
 .confidence-track {
-  height: 7px;
+  height: clamp(0.35rem, 0.7vh, 0.45rem);
   background: #e4eee4;
   border-radius: 999px;
   overflow: hidden;
-  margin-top: 8px;
+  margin-top: 0.5rem;
 }
 
 .confidence-fill {
@@ -484,9 +553,9 @@ button {
 }
 
 .class-name-text {
-  margin-top: 10px !important;
+  margin-top: 0.6rem;
   color: #667085;
-  font-size: 12px;
+  font-size: var(--body-size);
 }
 
 .class-name-text strong {
@@ -494,29 +563,32 @@ button {
 }
 
 .empty-result {
-  min-height: 205px;
+  flex: 1;
+  min-height: 0;
   border: 1px dashed #cfdccf;
   border-radius: 14px;
   background: #f7faf7;
   color: #667085;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 0.4rem;
+
   text-align: center;
-  padding: 18px;
-  margin-top: 10px;
+  padding: clamp(0.9rem, 1.5vw, 1.1rem);
+  margin-top: 0.6rem;
 }
 
 .empty-result p {
   color: #102116;
-  font-size: 16px;
+  font-size: clamp(0.95rem, 1.2vw, 1rem);
   font-weight: 800;
 }
 
 .empty-result span {
-  font-size: 12px;
+  font-size: var(--body-size);
 }
 
 .error-box {
@@ -528,17 +600,23 @@ button {
   color: #b91c1c;
 }
 
-/* ================= Nutrition cards ================= */
+/* 인식 결과 컴포넌트에서 제거된 요소가 남아 있어도 결과 카드에는 표시하지 않음 */
+.cell-result .nutrition-card-grid,
+.cell-result .feedback-container {
+  display: none;
+}
+
+/* ================= 영양 요약 카드 ================= */
 
 .nutrition-card-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid #e4eee4;
-  margin-top: 15px;
+  margin-top: clamp(0.7rem, 1vh, 0.95rem);
 }
 
 .nutrition-card {
-  padding: 12px 10px;
+  padding: clamp(0.6rem, 1vw, 0.75rem);
   border-right: 1px solid #e4eee4;
   background: #ffffff;
 }
@@ -548,60 +626,89 @@ button {
 }
 
 .nutrition-icon {
-  font-size: 18px;
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
 }
 
 .nutrition-card p {
-  margin-top: 6px;
+  margin-top: 0.35rem;
   color: #667085;
-  font-size: 12px;
+  font-size: var(--body-size);
 }
 
 .nutrition-card strong {
   display: block;
-  margin-top: 3px;
-  font-size: 18px;
+  margin-top: 0.2rem;
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
   color: #102116;
   letter-spacing: -0.04em;
 }
 
-/* ================= Feedback ================= */
+/* ================= 피드백 영역 ================= */
 
 .feedback-container {
-  margin-top: 12px;
-  padding: 12px;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
   background: #f7faf7;
   border: 1px solid #e4eee4;
   border-radius: 14px;
 }
 
-.action-box {
+.feedback-panel {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  align-items: center;
 }
 
-.action-box p {
-  font-weight: 800;
-  color: #102116;
+.feedback-panel h2 {
+  margin-bottom: clamp(0.6rem, 1vh, 0.9rem);
 }
 
-.button-row-full {
-  display: flex;
+.feedback-card-body,
+.feedback-empty {
+  flex: 1;
   width: 100%;
-  max-width: 320px;
-  gap: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+
+  gap: clamp(0.7rem, 1.2vh, 0.9rem);
+  text-align: center;
+}
+
+.feedback-card-body p {
+  margin: 0;
+  text-align: center;
+  color: #475467;
+  font-size: var(--body-size);
+  line-height: 1.5;
+}
+
+.feedback-card-body strong {
+  display: inline-block;
+  margin-top: 0.25rem;
+  color: #102116;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  font-weight: 800;
+}
+
+.feedback-button-column {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 0.8vh, 0.7rem);
 }
 
 .btn-yes,
 .btn-no,
 .btn-apply {
-  flex: 1;
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: var(--button-height);
   border: none;
   border-radius: 11px;
-  padding: 11px;
-  font-size: 13px;
+  padding: 0 clamp(0.7rem, 1vw, 0.9rem);
+  font-size: clamp(0.75rem, 0.9vw, 0.85rem);
   font-weight: 800;
 }
 
@@ -616,12 +723,17 @@ button {
   color: white;
 }
 
-.ramen-select {
-  width: min(100%, 260px);
-  padding: 11px;
+.ramen-select,
+.feedback-panel .ramen-select {
+  width: 100%;
+  min-height: var(--button-height);
+  padding: 0 clamp(0.7rem, 1vw, 0.9rem);
   border-radius: 11px;
   border: 1px solid #cfdccf;
   background: white;
+  color: #102116;
+  font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+  font-weight: 600;
 }
 
 .success-msg {
@@ -630,14 +742,13 @@ button {
   text-align: center;
 }
 
-/* ================= Bottom cards ================= */
+/* ================= 하단 카드 ================= */
 
 .cell-compare > .panel,
 .cell-detail > .panel {
   display: flex;
   flex-direction: column;
-  min-height: 255px;
-  overflow: visible;
+  min-height: 0;
 }
 
 .cell-compare .empty-text,
@@ -648,45 +759,58 @@ button {
   width: 100%;
   min-height: 0;
   height: auto;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   margin: 0;
   text-align: center;
 }
 
-/* ================= Average compare ================= */
+/* ================= 평균 비교 그래프 ================= */
 
 .vertical-compare-grid {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  margin-top: clamp(0.45rem, 0.8vh, 0.65rem);
+
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 10px;
-  width: 100%;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.45rem, 0.8vw, 0.65rem);
 }
 
 .vertical-compare-card {
+  min-width: 0;
+  min-height: 0;
+
   background: #f7faf7;
   border: 1px solid #e4eee4;
   border-radius: 13px;
-  padding: 9px;
-  min-height: 132px;
+  padding: clamp(0.45rem, 0.8vw, 0.65rem);
+
+  display: flex;
+  flex-direction: column;
 }
 
 .vertical-card-header {
+  flex: 0 0 auto;
+
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 7px;
+  gap: 0.25rem;
+  margin-bottom: clamp(0.25rem, 0.6vh, 0.45rem);
 }
 
 .vertical-card-header strong {
   color: #102116;
-  font-size: 11px;
+  font-size: clamp(0.65rem, 0.85vw, 0.78rem);
 }
 
 .vertical-card-header span {
-  font-size: 9px;
+  font-size: clamp(0.55rem, 0.7vw, 0.65rem);
   font-weight: 800;
 }
 
@@ -699,44 +823,50 @@ button {
 }
 
 .vertical-chart {
-  height: 78px;
+  flex: 1;
+  min-height: 0;
+
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 9px;
-  padding-top: 6px;
+  gap: clamp(0.45rem, 0.8vw, 0.75rem);
+  padding-top: 0.35rem;
 }
 
 .vertical-bar-group {
   height: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .bar-value {
-  height: 16px;
-  font-size: 8px;
+  flex: 0 0 auto;
+  height: clamp(0.85rem, 1.5vh, 1rem);
+  font-size: clamp(0.5rem, 0.65vw, 0.6rem);
   color: #667085;
   font-weight: 800;
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
   white-space: nowrap;
 }
 
 .bar-track {
-  width: 18px;
+  width: clamp(0.9rem, 1.25vw, 1.35rem);
   flex: 1;
   background: #e4eee4;
   border-radius: 999px;
+
   display: flex;
   align-items: flex-end;
+
   overflow: hidden;
 }
 
 .vertical-bar {
   width: 100%;
   border-radius: 999px 999px 0 0;
-  min-height: 6px;
+  min-height: 0.35rem;
 }
 
 .current-bar.high {
@@ -752,26 +882,27 @@ button {
 }
 
 .bar-label {
-  margin-top: 4px;
-  font-size: 9px;
+  margin-top: 0.25rem;
+  font-size: clamp(0.55rem, 0.7vw, 0.65rem);
   color: #475467;
   font-weight: 800;
 }
 
-/* ================= Nutrition table ================= */
+/* ================= 상세 영양성분 표 ================= */
 
 .nutrition-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: clamp(0.45rem, 0.8vh, 0.65rem);
 }
 
 .nutrition-table th,
 .nutrition-table td {
-  padding: 8px 9px;
+  padding: clamp(0.32rem, 0.65vh, 0.5rem)
+    clamp(0.45rem, 0.7vw, 0.6rem);
   border-bottom: 1px solid #e4eee4;
   text-align: left;
-  font-size: 11px;
+  font-size: clamp(0.62rem, 0.75vw, 0.72rem);
 }
 
 .nutrition-table th {
@@ -785,1137 +916,142 @@ button {
   font-weight: 800;
 }
 
-/* ================= Responsive ================= */
+/* ================= 반응형 설정 ================= */
 
-@media (max-width: 1360px) {
+/* px는 화면 전환 기준만 사용하고, 실제 칸 크기는 fr/%로 처리 */
+
+/* 큰 모니터 */
+@media (min-width: 1600px) {
   .reference-page {
-    width: calc(100vw - 32px) !important;
-    grid-template-columns: 310px minmax(0, 1fr) 320px !important;
+    width: 98vw;
+    max-width: 98vw;
+
+    grid-template-columns: 1fr 3.2fr 1.1fr 1fr;
+    grid-template-areas:
+      "scan result detail feedback"
+      "history compare compare compare";
+  }
+
+  .cell-result .result-hero {
+    grid-template-columns: 32% minmax(0, 1fr);
+    gap: 1.4vw;
+  }
+
+  .cell-result .result-image-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
   }
 }
 
-@media (max-width: 900px) {
+/* 노트북 */
+@media (max-width: 1599px) and (min-width: 901px) {
   .reference-page {
+    width: 97vw;
+    max-width: 97vw;
+
+    grid-template-columns: 0.9fr 3fr 1fr 0.9fr;
+    grid-template-areas:
+      "scan result detail feedback"
+      "history compare compare compare";
+
+    gap: clamp(0.45rem, 0.7vw, 0.75rem);
+  }
+
+  .panel {
+    padding: clamp(0.55rem, 0.7vw, 0.8rem);
+  }
+
+  .cell-result .result-hero {
+    grid-template-columns: 28% minmax(0, 1fr);
+    gap: clamp(0.7rem, 1vw, 1rem);
+  }
+
+  .cell-result .result-image-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+  }
+
+  .cell-result .result-main-info h3 {
+    font-size: clamp(1.4rem, 1.8vw, 2.2rem);
+    line-height: 1.15;
+  }
+
+  .cell-result .confidence-area strong {
+    font-size: clamp(1.3rem, 1.7vw, 2.1rem);
+  }
+
+  .cell-result .class-name-text {
+    overflow-wrap: anywhere;
+  }
+
+  .scanner-window {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+  }
+
+  .vertical-compare-grid {
+    gap: clamp(0.4rem, 0.65vw, 0.7rem);
+  }
+}
+
+/* 900px 이하: 노트북으로 보지 말고 작은 화면 2열 */
+@media (max-width: 900px) and (min-width: 601px) {
+  .reference-page {
+    width: 96vw;
+    max-width: 96vw;
+
+    grid-template-columns: 1fr 1.7fr;
+    grid-template-areas:
+      "scan result"
+      "detail feedback"
+      "history compare";
+
+    gap: 0.8rem;
+  }
+
+  .cell-result .result-hero {
+    grid-template-columns: 36% minmax(0, 1fr);
+  }
+
+  .cell-result .result-image-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+  }
+}
+
+/* 진짜 모바일만 1열 */
+@media (max-width: 600px) {
+  .reference-page {
+    width: 94vw;
+    max-width: 94vw;
+
     grid-template-columns: 1fr;
     grid-template-areas:
       "scan"
       "result"
+      "detail"
+      "feedback"
       "history"
-      "compare"
-      "detail";
+      "compare";
+
+    gap: 0.8rem;
   }
-}
 
-/* ===== 빈 상태 점선 박스 비율 통일 ===== */
-
-/* 모든 카드 내부를 세로 구조로 맞춤 */
-.cell-result .result-panel,
-.cell-history,
-.cell-compare > .panel,
-.cell-detail > .panel {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* 제목 줄은 위에 고정 */
-.cell-result .result-panel > h2,
-.cell-history .section-title-row,
-.cell-compare .section-title-row,
-.cell-detail .section-title-row,
-.cell-compare h2,
-.cell-detail h2 {
-  flex: 0 0 auto !important;
-}
-
-/* 설명 문구도 위에 고정 */
-.cell-compare .sub-text,
-.cell-detail .sub-text {
-  flex: 0 0 auto !important;
-}
-
-/* 점선 박스는 제목 아래 남은 공간을 같은 비율로 채움 */
-.cell-result .empty-result,
-.cell-history .empty-text,
-.cell-compare .empty-text,
-.cell-detail .empty-text,
-.cell-compare .empty-compare-box,
-.cell-detail .empty-compare-box {
-  flex: 1 1 auto !important;
-
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-
-  margin: 12px 0 0 0 !important;
-  padding: 0 16px !important;
-
-  border: 1px dashed #cfdccf !important;
-  background: #f7faf7 !important;
-  border-radius: 14px !important;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  text-align: center !important;
-  line-height: 1.5 !important;
-}
-
-/* 아래쪽 카드들은 높이를 통일해서 점선 박스 비율도 같게 */
-.cell-history,
-.cell-compare,
-.cell-detail {
-  min-height: 260px !important;
-}
-
-/* 가운데/오른쪽 카드 안 panel도 같은 높이로 */
-.cell-compare > .panel,
-.cell-detail > .panel {
-  min-height: 260px !important;
-}
-
-/* ===== 한 화면 안에 들어오게 높이 고정 ===== */
-
-.app-shell {
-  min-height: 100vh !important;
-  padding-bottom: 0 !important;
-  overflow: hidden !important;
-}
-
-.reference-page {
-  width: calc(100vw - 24px) !important;
-  max-width: none !important;
-  height: calc(100vh - 82px) !important;
-  margin: 12px auto 0 !important;
-
-  display: grid !important;
-  grid-template-columns: 320px minmax(0, 1fr) 360px !important;
-  grid-template-rows: minmax(0, 0.53fr) minmax(0, 0.47fr) !important;
-  grid-template-areas:
-    "scan result result"
-    "history compare detail" !important;
-
-  gap: 14px !important;
-  align-items: stretch !important;
-}
-
-/* 각 칸이 화면 밖으로 밀리지 않게 */
-.cell,
-.cell-scan,
-.cell-result,
-.cell-history,
-.cell-compare,
-.cell-detail {
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
-
-.cell-scan > .panel,
-.cell-result > .panel,
-.cell-compare > .panel,
-.cell-detail > .panel,
-.cell-history.panel {
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-/* ===== 위쪽 줄 압축 ===== */
-
-/* 왼쪽 스캔 카드 */
-.cell-scan .scanner-window {
-  height: 170px !important;
-}
-
-.cell-scan .status-message {
-  min-height: 22px !important;
-  margin-top: 6px !important;
-  font-size: 11px !important;
-}
-
-.cell-scan .button-row {
-  margin-top: 8px !important;
-}
-
-.cell-scan .primary-button,
-.cell-scan .danger-button {
-  padding: 9px 10px !important;
-  font-size: 12px !important;
-}
-
-/* 인식 결과 카드 */
-.cell-result .result-panel {
-  padding: 12px 14px !important;
-}
-
-.cell-result .result-hero {
-  grid-template-columns: 170px minmax(0, 1fr) !important;
-  gap: 18px !important;
-}
-
-.cell-result .result-image-box {
-  width: 170px !important;
-  height: 170px !important;
-}
-
-.cell-result .result-main-info h3 {
-  font-size: 28px !important;
-}
-
-.cell-result .confidence-area {
-  margin-top: 10px !important;
-}
-
-.cell-result .confidence-area strong {
-  font-size: 28px !important;
-}
-
-.cell-result .confidence-track {
-  height: 6px !important;
-  margin-top: 7px !important;
-}
-
-.cell-result .class-name-text {
-  margin-top: 8px !important;
-  font-size: 11px !important;
-}
-
-/* 영양 카드 줄 압축 */
-.cell-result .nutrition-card-grid {
-  margin-top: 10px !important;
-}
-
-.cell-result .nutrition-card {
-  padding: 9px 10px !important;
-}
-
-.cell-result .nutrition-card strong {
-  font-size: 16px !important;
-}
-
-.cell-result .nutrition-card p {
-  font-size: 11px !important;
-}
-
-/* 맞나요 영역 압축 */
-.cell-result .feedback-container {
-  margin-top: 8px !important;
-  padding: 8px !important;
-}
-
-.cell-result .action-box {
-  gap: 6px !important;
-}
-
-.cell-result .btn-yes,
-.cell-result .btn-no {
-  padding: 9px !important;
-  font-size: 12px !important;
-}
-
-/* ===== 아래쪽 줄 압축 ===== */
-
-.cell-history,
-.cell-compare > .panel,
-.cell-detail > .panel {
-  height: 100% !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
-
-/* 평균 비교 6칸이 아래 줄 안에 들어오게 */
-.cell-compare .vertical-compare-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 7px !important;
-  margin-top: 8px !important;
-}
-
-.cell-compare .vertical-compare-card {
-  min-height: 0 !important;
-  height: 118px !important;
-  padding: 7px !important;
-}
-
-.cell-compare .vertical-card-header {
-  margin-bottom: 4px !important;
-}
-
-.cell-compare .vertical-card-header strong {
-  font-size: 10px !important;
-}
-
-.cell-compare .vertical-card-header span {
-  font-size: 8px !important;
-}
-
-.cell-compare .vertical-chart {
-  height: 68px !important;
-  gap: 8px !important;
-}
-
-.cell-compare .bar-track {
-  width: 16px !important;
-}
-
-.cell-compare .bar-value {
-  height: 14px !important;
-  font-size: 8px !important;
-  margin-bottom: 3px !important;
-}
-
-.cell-compare .bar-label {
-  font-size: 8px !important;
-  margin-top: 3px !important;
-}
-
-/* 상세 영양성분 표 압축 */
-.cell-detail .nutrition-table {
-  margin-top: 8px !important;
-}
-
-.cell-detail .nutrition-table th,
-.cell-detail .nutrition-table td {
-  padding: 6px 8px !important;
-  font-size: 10px !important;
-}
-
-/* 제목/설명 줄 압축 */
-.cell-compare .sub-text,
-.cell-detail .sub-text {
-  font-size: 10px !important;
-  margin: 5px 0 7px !important;
-}
-
-.panel h2 {
-  font-size: 14px !important;
-}
-
-.section-title-row,
-.panel-title-row {
-  margin-bottom: 8px !important;
-}
-
-/* 스크롤바 자체 방지 */
-html,
-body,
-#root {
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-/* ===== 칸 내부 배율만 조정 ===== */
-
-/* 모든 카드 내부가 칸 높이를 꽉 쓰게 */
-.cell-scan > .panel,
-.cell-result > .panel,
-.cell-compare > .panel,
-.cell-detail > .panel,
-.cell-history.panel {
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-/* ========================= */
-/* 실시간 스캔 카드 내부 비율 */
-/* ========================= */
-
-.cell-scan .scanner-panel {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.cell-scan .panel-title-row {
-  flex: 0 0 auto !important;
-}
-
-.cell-scan .scanner-window {
-  flex: 1 1 auto !important;
-  height: auto !important;
-  min-height: 0 !important;
-}
-
-.cell-scan .status-message {
-  flex: 0 0 auto !important;
-  min-height: 24px !important;
-  margin-top: 8px !important;
-}
-
-.cell-scan .button-row {
-  flex: 0 0 auto !important;
-  margin-top: 10px !important;
-}
-
-/* ========================= */
-/* 인식 결과 카드 내부 비율 */
-/* ========================= */
-
-.cell-result .result-panel {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* 제목 */
-.cell-result .section-title-row {
-  flex: 0 0 auto !important;
-}
-
-/* 이미지 + 제품명 영역 */
-.cell-result .result-hero {
-  flex: 1.1 1 0 !important;
-  min-height: 0 !important;
-
-  display: grid !important;
-  grid-template-columns: 28% 1fr !important;
-  gap: 24px !important;
-  align-items: center !important;
-}
-
-/* 결과 이미지가 카드 높이에 맞게 커졌다 작아지게 */
-.cell-result .result-image-box {
-  width: 100% !important;
-  height: 100% !important;
-  max-height: 220px !important;
-  aspect-ratio: 1 / 1 !important;
-}
-
-/* 신뢰도 바가 너무 길게 퍼지지 않게 */
-.cell-result .confidence-track {
-  width: 100% !important;
-  max-width: 620px !important;
-}
-
-/* 영양 카드 영역 */
-.cell-result .nutrition-card-grid {
-  flex: 0.75 1 0 !important;
-  min-height: 0 !important;
-  margin-top: 10px !important;
-
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
-  align-items: stretch !important;
-}
-
-.cell-result .nutrition-card {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-}
-
-/* 맞나요 영역 */
-.cell-result .feedback-container {
-  flex: 0 0 auto !important;
-  margin-top: 10px !important;
-}
-
-/* ========================= */
-/* 아래 3칸 내부 비율 */
-/* ========================= */
-
-.cell-history,
-.cell-compare > .panel,
-.cell-detail > .panel {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* 제목은 위에 고정 */
-.cell-history .section-title-row,
-.cell-compare .section-title-row,
-.cell-detail .section-title-row,
-.cell-compare h2,
-.cell-detail h2 {
-  flex: 0 0 auto !important;
-}
-
-/* 설명문은 제목 아래 고정 */
-.cell-compare .sub-text,
-.cell-detail .sub-text {
-  flex: 0 0 auto !important;
-}
-
-/* 빈 상태 점선 박스는 남은 영역을 같은 비율로 채움 */
-.cell-history .empty-text,
-.cell-compare .empty-text,
-.cell-detail .empty-text,
-.cell-compare .empty-compare-box,
-.cell-detail .empty-compare-box {
-  flex: 1 1 auto !important;
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-
-  margin: 10px 0 0 0 !important;
-  padding: 0 16px !important;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* 평균 비교 결과가 있을 때: 6개 카드가 아래 칸 안에서 균등 분배 */
-.cell-compare .vertical-compare-grid {
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  grid-template-rows: repeat(2, 1fr) !important;
-  gap: 8px !important;
-  margin-top: 8px !important;
-}
-
-.cell-compare .vertical-compare-card {
-  min-height: 0 !important;
-  height: auto !important;
-}
-
-/* 상세 영양성분 표가 오른쪽 칸 안에 맞게 */
-.cell-detail .nutrition-table {
-  flex: 1 1 auto !important;
-  width: 100% !important;
-}
-
-.cell-detail .nutrition-table th,
-.cell-detail .nutrition-table td {
-  padding: 6px 8px !important;
-}
-
-/* ===== 헤더 크기 키우고 로고 중앙 정렬 ===== */
-
-.top-header {
-  height: 78px !important;
-  padding: 0 28px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.brand-area {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 12px !important;
-}
-
-.brand-icon {
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: 14px !important;
-  font-size: 22px !important;
-}
-
-.brand-area h1 {
-  font-size: 22px !important;
-  line-height: 1.1 !important;
-}
-
-.brand-area p {
-  font-size: 12px !important;
-  margin-top: 4px !important;
-}
-
-/* ===== 스크롤 차단 X, 화면에 맞게 크기 조정 ===== */
-
-/* 스크롤을 강제로 막지 않음 */
-html,
-body,
-#root {
-  height: auto !important;
-  min-height: 100% !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
-
-.app-shell {
-  min-height: 100vh !important;
-  overflow: visible !important;
-  padding-bottom: 12px !important;
-}
-
-/* 헤더가 커진 만큼 본문 높이를 화면 안에 맞춤 */
-.reference-page {
-  width: calc(100vw - 24px) !important;
-  max-width: none !important;
-  margin: 10px auto 0 !important;
-
-  display: grid !important;
-  grid-template-columns: 320px minmax(0, 1fr) 360px !important;
-  grid-template-areas:
-    "scan result result"
-    "history compare detail" !important;
-
-  gap: 12px !important;
-  align-items: stretch !important;
-}
-
-/* 카드 기본 여백 줄이기 */
-.panel {
-  padding: 12px !important;
-  border-radius: 15px !important;
-}
-
-/* 헤더 크기 유지하되 너무 크지 않게 */
-.top-header {
-  height: 72px !important;
-}
-
-/* 왼쪽 스캔 카드 압축 */
-.cell-scan .scanner-window {
-  height: 165px !important;
-}
-
-.cell-scan .status-message {
-  min-height: 22px !important;
-  margin-top: 6px !important;
-  font-size: 11px !important;
-}
-
-.cell-scan .button-row {
-  margin-top: 8px !important;
-}
-
-.cell-scan .primary-button,
-.cell-scan .danger-button {
-  padding: 9px 10px !important;
-  font-size: 12px !important;
-}
-
-/* 인식 결과 카드 압축 */
-.cell-result .result-hero {
-  grid-template-columns: 165px minmax(0, 1fr) !important;
-  gap: 18px !important;
-}
-
-.cell-result .result-image-box {
-  width: 165px !important;
-  height: 165px !important;
-}
-
-.cell-result .result-main-info h3 {
-  font-size: 27px !important;
-}
-
-.cell-result .confidence-area {
-  margin-top: 8px !important;
-}
-
-.cell-result .confidence-area strong {
-  font-size: 27px !important;
-}
-
-.cell-result .confidence-track {
-  height: 6px !important;
-  margin-top: 6px !important;
-}
-
-.cell-result .class-name-text {
-  margin-top: 7px !important;
-  font-size: 11px !important;
-}
-
-/* 영양 카드 줄 압축 */
-.cell-result .nutrition-card-grid {
-  margin-top: 9px !important;
-}
-
-.cell-result .nutrition-card {
-  padding: 8px 10px !important;
-}
-
-.cell-result .nutrition-card strong {
-  font-size: 16px !important;
-}
-
-.cell-result .nutrition-card p {
-  font-size: 11px !important;
-}
-
-/* 이 라면이 맞나요 영역 압축 */
-.cell-result .feedback-container {
-  margin-top: 8px !important;
-  padding: 8px !important;
-}
-
-.cell-result .action-box {
-  gap: 6px !important;
-}
-
-.cell-result .btn-yes,
-.cell-result .btn-no {
-  padding: 8px !important;
-  font-size: 12px !important;
-}
-
-/* 아래쪽 평균 비교 카드 압축 */
-.cell-compare .vertical-compare-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 7px !important;
-  margin-top: 7px !important;
-}
-
-.cell-compare .vertical-compare-card {
-  min-height: 0 !important;
-  height: 110px !important;
-  padding: 7px !important;
-}
-
-.cell-compare .vertical-card-header {
-  margin-bottom: 3px !important;
-}
-
-.cell-compare .vertical-card-header strong {
-  font-size: 10px !important;
-}
-
-.cell-compare .vertical-card-header span {
-  font-size: 8px !important;
-}
-
-.cell-compare .vertical-chart {
-  height: 62px !important;
-  gap: 8px !important;
-}
-
-.cell-compare .bar-track {
-  width: 16px !important;
-}
-
-.cell-compare .bar-value {
-  height: 13px !important;
-  font-size: 8px !important;
-  margin-bottom: 3px !important;
-}
-
-.cell-compare .bar-label {
-  font-size: 8px !important;
-  margin-top: 3px !important;
-}
-
-/* 상세 영양성분 표 압축 */
-.cell-detail .nutrition-table {
-  margin-top: 7px !important;
-}
-
-.cell-detail .nutrition-table th,
-.cell-detail .nutrition-table td {
-  padding: 5px 8px !important;
-  font-size: 10px !important;
-}
-
-/* 제목/설명 압축 */
-.panel h2 {
-  font-size: 14px !important;
-}
-
-.section-title-row,
-.panel-title-row {
-  margin-bottom: 7px !important;
-}
-
-.cell-compare .sub-text,
-.cell-detail .sub-text {
-  font-size: 10px !important;
-  margin: 4px 0 6px !important;
-}
-
-/* ===== 평균 비교 그래프 크기 키우기 ===== */
-
-.cell-compare .vertical-compare-grid {
-  gap: 10px !important;
-  margin-top: 10px !important;
-}
-
-.cell-compare .vertical-compare-card {
-  height: 135px !important;
-  padding: 10px 12px !important;
-}
-
-.cell-compare .vertical-card-header {
-  margin-bottom: 6px !important;
-}
-
-.cell-compare .vertical-card-header strong {
-  font-size: 12px !important;
-}
-
-.cell-compare .vertical-card-header span {
-  font-size: 9px !important;
-}
-
-.cell-compare .vertical-chart {
-  height: 82px !important;
-  gap: 12px !important;
-}
-
-.cell-compare .bar-track {
-  width: 22px !important;
-}
-
-.cell-compare .bar-value {
-  height: 16px !important;
-  font-size: 9px !important;
-  margin-bottom: 4px !important;
-}
-
-.cell-compare .bar-label {
-  font-size: 10px !important;
-  margin-top: 4px !important;
-}
-
-/* ===== 하단 세로 비율 수정: 비교칸 넓게, 상세칸 좁게 ===== */
-
-/* 전체 3칸 비율 조정 */
-.reference-page {
-  grid-template-columns: 300px minmax(520px, 1fr) 300px !important;
-}
-
-/* 아래쪽 비교/상세 카드 높이 */
-.cell-compare > .panel,
-.cell-detail > .panel,
-.cell-history.panel {
-  height: 100% !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
-
-/* 평균 비교 카드 내부를 3 x 2로 균등하게 */
-.cell-compare .vertical-compare-grid {
-  height: calc(100% - 48px) !important;
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
-  gap: 10px !important;
-  margin-top: 8px !important;
-}
-
-/* 그래프 카드가 세로로 늘어지지 않게 */
-.cell-compare .vertical-compare-card {
-  height: auto !important;
-  min-height: 0 !important;
-  padding: 9px 10px !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* 그래프 제목 영역 */
-.cell-compare .vertical-card-header {
-  flex: 0 0 auto !important;
-  margin-bottom: 4px !important;
-}
-
-/* 막대 그래프 영역 */
-.cell-compare .vertical-chart {
-  flex: 1 1 auto !important;
-  height: auto !important;
-  min-height: 56px !important;
-  gap: 10px !important;
-}
-
-/* 막대 크기 */
-.cell-compare .bar-track {
-  width: 20px !important;
-}
-
-.cell-compare .bar-value {
-  height: 14px !important;
-  font-size: 8px !important;
-  margin-bottom: 3px !important;
-}
-
-.cell-compare .bar-label {
-  font-size: 9px !important;
-  margin-top: 3px !important;
-}
-
-/* 오른쪽 상세 표가 너무 크게 보이지 않게 */
-.cell-detail .nutrition-table th,
-.cell-detail .nutrition-table td {
-  padding: 6px 8px !important;
-  font-size: 10px !important;
-}
-
-/* 화면이 좁을 때는 오른쪽 상세칸을 줄이고 비교칸 확보 */
-@media (max-width: 1200px) {
-  .reference-page {
-    grid-template-columns: 300px minmax(460px, 1fr) 260px !important;
+  .cell-result .result-hero {
+    grid-template-columns: 1fr;
   }
-}
 
-/* ===== 요구 구조 반영 ===== */
-/* 위: 스캔 / 인식결과 / 상세정보 / 맞나요 */
-/* 아래: 최근기록 / 평균비교 넓게 */
+  .cell-result .result-image-box {
+    width: 70%;
+    justify-self: center;
+  }
 
-.reference-page {
-  width: calc(100vw - 24px) !important;
-  max-width: none !important;
-  margin: 10px auto 0 !important;
-
-  display: grid !important;
-  grid-template-columns: 300px minmax(520px, 1fr) 300px 280px !important;
-  grid-template-areas:
-    "scan result detail feedback"
-    "history compare compare compare" !important;
-
-  gap: 12px !important;
-  align-items: stretch !important;
-}
-
-/* 칸 위치 */
-.cell-scan {
-  grid-area: scan !important;
-}
-
-.cell-result {
-  grid-area: result !important;
-}
-
-.cell-detail {
-  grid-area: detail !important;
-}
-
-.cell-feedback {
-  grid-area: feedback !important;
-}
-
-.cell-history {
-  grid-area: history !important;
-}
-
-.cell-compare {
-  grid-area: compare !important;
-}
-
-/* 공통 */
-.cell {
-  min-width: 0 !important;
-  min-height: 0 !important;
-}
-
-.cell-scan > .panel,
-.cell-result > .panel,
-.cell-detail > .panel,
-.cell-feedback > .panel,
-.cell-compare > .panel,
-.cell-history.panel {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* 인식 결과 카드: 요약 카드 제거 후 비율 정리 */
-.cell-result .result-panel {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.cell-result .result-hero {
-  flex: 1 !important;
-  display: grid !important;
-  grid-template-columns: 220px minmax(0, 1fr) !important;
-  gap: 22px !important;
-  align-items: center !important;
-}
-
-.cell-result .result-image-box {
-  width: 220px !important;
-  height: 220px !important;
-}
-
-.cell-result .confidence-track {
-  max-width: 100% !important;
-}
-
-/* 상세 영양성분을 위쪽 칸에 맞춤 */
-.cell-detail > .panel {
-  overflow: hidden !important;
-}
-
-.cell-detail .nutrition-table {
-  margin-top: 10px !important;
-}
-
-.cell-detail .nutrition-table th,
-.cell-detail .nutrition-table td {
-  padding: 7px 8px !important;
-  font-size: 11px !important;
-}
-
-/* 오른쪽 끝 피드백 카드 */
-.feedback-panel {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.feedback-card-body,
-.feedback-empty {
-  flex: 1 !important;
-  width: 100% !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  text-align: center !important;
-  gap: 14px !important;
-}
-
-.feedback-card-body p {
-  color: #475467;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.feedback-card-body strong {
-  color: #102116;
-  font-size: 18px;
-}
-
-.feedback-button-column {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.feedback-button-column .btn-yes,
-.feedback-button-column .btn-no {
-  width: 100%;
-}
-
-/* 아래 평균 비교 카드가 오른쪽 끝까지 차지 */
-.cell-compare > .panel {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.cell-compare .vertical-compare-grid {
-  flex: 1 !important;
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
-  gap: 10px !important;
-}
-
-.cell-compare .vertical-compare-card {
-  height: auto !important;
-  min-height: 0 !important;
-}
-
-/* 기존 결과 안 영양 카드 혹시 남으면 숨김 */
-.cell-result .nutrition-card-grid {
-  display: none !important;
-}
-
-/* 기존 결과 안 맞나요 영역 혹시 남으면 숨김 */
-.cell-result .feedback-container {
-  display: none !important;
-}
-
-/* ===== 피드백 카드 디자인 정리 ===== */
-
-.feedback-panel {
-  display: flex !important;
-  flex-direction: column !important;
-  padding: 16px !important;
-}
-
-.feedback-panel h2 {
-  margin-bottom: 14px !important;
-}
-
-/* 피드백 카드 안쪽 영역 */
-.feedback-card-body {
-  flex: 1 !important;
-  width: 100% !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: stretch !important;
-
-  gap: 14px !important;
-}
-
-/* 셀렉트 박스 */
-.feedback-panel .ramen-select {
-  width: 100% !important;
-  height: 44px !important;
-  padding: 0 14px !important;
-
-  border: 1px solid #cfdccf !important;
-  border-radius: 12px !important;
-  background: #ffffff !important;
-
-  color: #102116 !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-}
-
-/* 변경 적용 버튼이 세로로 늘어나지 않게 */
-.feedback-panel .btn-apply {
-  flex: 0 0 auto !important;
-
-  width: 100% !important;
-  height: 44px !important;
-  padding: 0 !important;
-
-  border: none !important;
-  border-radius: 12px !important;
-
-  background: #168243 !important;
-  color: #ffffff !important;
-
-  font-size: 14px !important;
-  font-weight: 800 !important;
-}
-
-/* 네/아니오 버튼도 카드 안에서 자연스럽게 */
-.feedback-button-column {
-  width: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-}
-
-.feedback-button-column .btn-yes,
-.feedback-button-column .btn-no {
-  flex: 0 0 auto !important;
-  width: 100% !important;
-  height: 42px !important;
-  padding: 0 !important;
-  border-radius: 12px !important;
-}
-
-/* 선택 안내 문구 */
-.feedback-card-body p {
-  margin: 0 !important;
-  text-align: center !important;
-  color: #475467 !important;
-  font-size: 13px !important;
-  line-height: 1.5 !important;
-}
-
-.feedback-card-body strong {
-  display: inline-block !important;
-  margin-top: 4px !important;
-  color: #102116 !important;
-  font-size: 18px !important;
-}
-
-/* ===== 인식 결과 사진만 크게 ===== */
-
-.cell-result .result-hero {
-  grid-template-columns: 400px minmax(0, 1fr) !important;
-  gap: 28px !important;
-}
-
-.cell-result .result-image-box {
-  width: 400px !important;
-  height: 400px !important;
-  border-radius: 18px !important;
-}
-
-.cell-result .result-image-box img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
+  .vertical-compare-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
 }
