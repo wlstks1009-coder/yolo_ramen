@@ -30,10 +30,11 @@
 
 ## 📑 목차
 [01. 프로젝트 개요](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#project-overview)<br>
-[02. YOLO 모델 비교 및 채택](https://github.com/wlstks1009-coder/yolo_ramenn?tab=readme-ov-file#yolo-model-comparison-and-selection)<br>
-[03. DB 연동, React연동 및 구현](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#db-and-react-integration-and-implementation)<br>
+[02. YOLO 모델 비교 및 채택](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#yolo-model-comparison-and-selection)<br>
+[03. DB 연동, React연동 및 구현](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#db-integration-react-integration-and-implementation)<br>
 [04. UI 시연](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#ui-demonstration)<br>
 [05. 최종 결과 및 결론](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#project-result)<br>
+[06. 데모 영상](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#demo-video)<br>
 
 ## Project Overview
 
