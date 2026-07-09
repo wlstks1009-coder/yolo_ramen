@@ -34,7 +34,6 @@
 [03. DB 연동, React연동 및 구현](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#db-integration-react-integration-and-implementation)<br>
 [04. UI 시연](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#ui-demonstration)<br>
 [05. 최종 결과 및 결론](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#project-result)<br>
-[06. 데모 영상](https://github.com/wlstks1009-coder/yolo_ramen?tab=readme-ov-file#demo-video)<br>
 
 ## Project Overview
 
