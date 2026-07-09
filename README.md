@@ -54,7 +54,7 @@
 
 ## YOLO Model Comparison and Selection
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/89d98256-3d1d-4438-b5dc-a979eec7654f" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/82b73654-c2b2-4343-bca1-d9a57f5805d2" />
 
 <img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c89e4130-c516-4ebe-8912-05a409b9e443" />
 
