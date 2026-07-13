@@ -8,29 +8,10 @@ CSV_ENCODINGS = ("utf-8", "cp949")
 
 # 테이블 컬럼명과 일치하는 영문 리스트
 ORACLE_COLUMNS = [
-    "FOOD_CODE",
-    "YOLO_CLASS",
-    "FOOD_NAME",
-    "NUTRITION_REFERENCE_AMOUNT",
-    "ENERGY_KCAL",
-    "MOISTURE_G",
-    "PROTEIN_G",
-    "FAT_G",
-    "CARBOHYDRATE_G",
-    "SUGARS_G",
-    "DIETARY_FIBER_G",
-    "CALCIUM_MG",
-    "IRON_MG",
-    "PHOSPHORUS_MG",
-    "POTASSIUM_MG",
-    "SODIUM_MG",
-    "VITAMIN_A_UG_RAE",
-    "VITAMIN_C_MG",
-    "CHOLESTEROL_MG",
-    "SATURATED_FAT_G",
-    "TRANS_FAT_G",
-    "FOOD_WEIGHT",
-    "MANUFACTURER_NAME",
+    '식품코드', 'YOLO_CLASS', '식품명', '영양성분함량기준량', '에너지(kcal)', '수분(g)',
+    '단백질(g)', '지방(g)', '탄수화물(g)', '당류(g)', '식이섬유(g)', '칼슘(mg)',
+    '철(mg)', '인(mg)', '칼륨(mg)', '나트륨(mg)', '비타민 A(μg RAE)', '비타민 C(mg)',
+    '콜레스테롤(mg)', '포화지방산(g)', '트랜스지방산(g)', '식품중량', '제조사명'
 ]
 
 INSERT_QUERY = """
