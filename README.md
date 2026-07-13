@@ -25,7 +25,7 @@
 	  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 	</div>
 
-[![PPTX](https://img.shields.io/badge/Presentation-PPTX-blue)](https://github.com/user-attachments/files/29834943/Ramenyze.pptx.pptx)
+[![PPTX](https://img.shields.io/badge/Presentation-PPTX-blue)](https://github.com/user-attachments/files/29956297/Ramenyze.pptx)
 
 
 ## 📑 목차
@@ -45,40 +45,41 @@
 
 <img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c5854871-a91e-4358-9f63-ada65eb77ce3" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/853a8143-e678-485f-b9d0-7b637fd3c674" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/b4b80648-3afa-4f19-a97c-3182a100fd27" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c18b212a-78f3-4be7-8a30-9ca8ca59f951" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/b6c675df-0850-474f-9879-21c6b07c654e" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/77876a4e-f0a8-4559-9475-39714d3479d1" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/2efae9e1-cf2b-44a5-8980-00dcdc9a238b" />
 
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/21fb775d-76e0-45fe-a502-863778abbb5c" />
 
 ## YOLO Model Comparison and Selection
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/82b73654-c2b2-4343-bca1-d9a57f5805d2" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/253b37bf-e911-4cad-b319-97fae9893667" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c89e4130-c516-4ebe-8912-05a409b9e443" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/342b139b-4910-434e-b3b7-705354e682cd" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/0d006205-3476-4094-abeb-a7dcafadc2a5" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/4776144b-81ba-43f7-b9e9-b5c40b9bcb3c" />
 
 ## DB Integration, React Integration and Implementation
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/42860e63-81c6-41cc-8487-033878ec6466" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/0ce35b42-4929-4be6-be9d-6bbd9e17f5f5" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/7e9bf540-e819-4d86-9c64-643b582c7a62" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/b905ebc8-f4d7-41a5-a2e8-57f9f8f56b6c" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/fd5d63b8-fc69-4f7f-836d-03aefd0c1c03" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/61d29e68-9492-4f03-803b-20b67c6b7a53" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/2d6f19ff-55fc-4a70-9498-e0404b153320" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/b9602c03-7430-4ddc-a178-83d63e2f340e" />
 
 ## UI Demonstration
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/a4d721d8-1438-4559-817a-4fdd2c18e86f" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/bd735715-5df8-4b66-9f97-6bca4fdd0f47" />
 
 ## Project Result
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/10a94b25-73f9-4b13-8693-ab8d54bf615c" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c401c001-9e36-4f3f-8e73-f975d8a6f54e" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/4ac4a58c-5dd9-4dd8-ad35-6c893e333230" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c4661a2b-951d-4036-be34-a6ed9eeb4fea" />
 
 ## 🎬 Demo Video
 
