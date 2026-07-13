@@ -24,32 +24,24 @@ app = FastAPI()
 # 1. YOLOv8 모델 로드
 model = YOLO("models/yolo11n_ver2.pt")
 
-engine = config.get_engine()
-
+engine = config.get_engine() #데이터 베이스 연결 엔진 생성
 
 def get_ramen_info_from_db(yolo_class_name):
     """SQLAlchemy Engine을 사용해 마리아DB에서 라면 정보를 조회하는 함수"""
 
     query = text("""
-                   SELECT 식품명,
-                          에너지_KCAL,
-                          단백질_G,
-                          지방_G,
-                          탄수화물_G,
-                          당류_G,
-                          나트륨_MG,
-                          식품중량,
-                          제조사명
-                   FROM RAMEN_NUTRITION
-                   WHERE YOLO_CLASS = :class_name
-                   """)
-
+                 SELECT FOOD_NAME, ENERGY_KCAL, PROTEIN_G, FAT_G, CARBOHYDRATE_G, 
+                        SUGARS_G, SODIUM_MG, FOOD_WEIGHT, MANUFACTURER_NAME
+                 FROM RAMEN_NUTRITION
+                 WHERE YOLO_CLASS = :class_name
+                 """) # DB 에서 YOLO 클래스명으로 해당라면의 영양 정보 조회
     try:
         with engine.connect() as connection:
             result = connection.execute((query), {"class_name": yolo_class_name})
             row = result.fetchone()
 
         if row:
+            # 조회된 데이터를 프론트엔드용 JSON 형태로 가공하여 반환
             return {
                 "name": row[0],
                 "calories": f"{row[1]} kcal",
@@ -64,21 +56,21 @@ def get_ramen_info_from_db(yolo_class_name):
         return None
 
     except Exception as e:
-        print(f"❌ 마리아DB(SQLAlchemy) 에러: {e}")
+        print(f"DB 조회 에러: {e}")
         return None
 
 def get_average_nutrition_from_db():
 
     try:
         query = text("""
-                SELECT AVG(에너지_KCAL), 
-                       AVG(탄수화물_G), 
-                       AVG(당류_G), 
-                       AVG(단백질_G), 
-                       AVG(지방_G), 
-                       AVG(나트륨_MG)
-                FROM RAMEN_NUTRITION 
-                """)
+                     SELECT AVG(ENERGY_KCAL),
+                            AVG(CARBOHYDRATE_G),
+                            AVG(SUGARS_G),
+                            AVG(PROTEIN_G),
+                            AVG(FAT_G),
+                            AVG(SODIUM_MG)
+                     FROM RAMEN_NUTRITION
+                     """)
 
         with engine.connect() as connection:
             result = connection.execute(query)
@@ -196,8 +188,6 @@ def get_nutrition_by_class(yolo_class: str):
         "requestedClass": yolo_class
     }
 
-
-# YOLO 예측 결과와 영양성분 연결용 API
 @app.get("/nutrition-result/{detected_class}")
 def get_nutrition_result(detected_class: str):
     selected = None
@@ -284,4 +274,3 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
-

@@ -30,21 +30,20 @@ csv_columns = [
 # 필요한 컬럼만 추출
 df_filtered = df[csv_columns].copy()
 
-# ⭐ [핵심 변경 사항] 특수문자 괄호 때문에 꼬이지 않도록 딕셔너리의 Key값을 c0 ~ c22로 강제 매핑합니다.
-# 이렇게 하면 SQLAlchemy가 파싱할 때 에러가 절대 나지 않습니다.
+# 특수문자나 괄호 문제를 방지하기 위해 c0 ~ c22로 매핑
 rename_dict = {old_col: f"c{i}" for i, old_col in enumerate(csv_columns)}
 df_renamed = df_filtered.rename(columns=rename_dict)
 
-# 데이터프레임을 딕셔너리 리스트로 변환 (Key가 c0, c1, c2... 형태가 됨)
+# 데이터프레임을 딕셔너리 리스트로 변환
 data_rows = df_renamed.to_dict(orient='records')
 
-# 3. 바뀐 Key(c0 ~ c22)에 맞춘 안전한 INSERT 쿼리문
+# 3. 바뀐 Key(c0 ~ c22)와 일치하도록 INSERT 쿼리문의 컬럼명을 영문으로 수정
 insert_query = dedent("""
     INSERT INTO RAMEN_NUTRITION (
-        식품코드, YOLO_CLASS, 식품명, 영양성분함량기준량, 에너지_KCAL, 수분_G, 
-        단백질_G, 지방_G, 탄수화물_G, 당류_G, 식이섬유_G, 칼슘_MG, 
-        철_MG, 인_MG, 칼륨_MG, 나트륨_MG, 비타민A_UG_RAE, 비타민C_MG, 
-        콜레스테롤_MG, 포화지방산_G, 트랜스지방산_G, 식품중량, 제조사명
+        FOOD_CODE, YOLO_CLASS, FOOD_NAME, NUTRITION_REFERENCE_AMOUNT, ENERGY_KCAL, MOISTURE_G, 
+        PROTEIN_G, FAT_G, CARBOHYDRATE_G, SUGARS_G, DIETARY_FIBER_G, CALCIUM_MG, 
+        IRON_MG, PHOSPHORUS_MG, POTASSIUM_MG, SODIUM_MG, VITAMIN_A_UG_RAE, VITAMIN_C_MG, 
+        CHOLESTEROL_MG, SATURATED_FAT_G, TRANS_FAT_G, FOOD_WEIGHT, MANUFACTURER_NAME
     ) 
     VALUES (
         :c0, :c1, :c2, :c3, :c4, :c5, 
