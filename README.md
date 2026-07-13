@@ -73,13 +73,13 @@
 
 ## UI Demonstration
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/bd735715-5df8-4b66-9f97-6bca4fdd0f47" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c4661a2b-951d-4036-be34-a6ed9eeb4fea" />
 
 ## Project Result
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c401c001-9e36-4f3f-8e73-f975d8a6f54e" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/bd735715-5df8-4b66-9f97-6bca4fdd0f47" />
 
-<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c4661a2b-951d-4036-be34-a6ed9eeb4fea" />
+<img width="2400" height="1350" alt="Image" src="https://github.com/user-attachments/assets/c401c001-9e36-4f3f-8e73-f975d8a6f54e" />
 
 ## 🎬 Demo Video
 
